@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Guest;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,15 +51,17 @@ class JsonController extends AbstractController
     public function checkIn(Guest $guest): JsonResponse
     {
         $status = 'NACK';
+        $checkInTime = new \DateTime('now');
         try {
-            $guest->setCheckInTime(new \DateTime('now'));
+            $guest->setCheckInTime($checkInTime);
             $this->entityManager->persist($guest);
             $this->entityManager->flush();
             $status = 'ACK';
         } catch (\Exception $e) {
         }
         return $this->json([
-            'status' => $status
+            'status' => $status,
+            'time' => $checkInTime->format(DateTimeInterface::ATOM)
         ]);
     }
     /**
