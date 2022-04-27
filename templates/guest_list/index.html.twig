@@ -3,19 +3,23 @@
 {% block title %}Guestlist | Select Event{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
 <div class="example-wrapper">
     <h1>Guestlist</h1>
+    <table>
+        <tr>
+            <th>Event</th>
+            <th>Total Guests</th>
+            <th></th>
+        </tr>
 
-    Please select an event
-    <ul>
         {% for event in events %}
-            <li><a href="{{ path('app_guest_list_event', { event:event.id }) }}">{{ event.name }}</a></li>
+            <tr>
+            <td>{{ event.name }}</td>
+            <td>{{ event.guests|length }}</td>
+            <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn-checkin">SELECT</a></td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 </div>
 {% endblock %}

@@ -48,5 +48,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Events', 'fas fa-list', Event::class);
         yield MenuItem::linkToCrud('Guests', 'fas fa-user', Guest::class);
+        yield MenuItem::linkToRoute('Back to site', 'fas fa-chevron-left', 'app_guest_list');
     }
 }

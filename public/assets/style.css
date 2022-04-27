@@ -1,0 +1,33 @@
+body { font: 18px/1.5 sans-serif; }
+.btn-checkin {
+    display: block;
+    border: 2px solid darkgreen;
+    padding: 4px;
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+.btn-checkout {
+    display: block;
+    border: 2px solid #af0000;
+    padding: 4px;
+    background-color: #ff0000;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+td {
+    border-top: 1px solid grey;
+    border-right: 1px solid grey;
+    padding: 10px;
+}
+table {
+    width: 80%;
+    padding: 0;
+    border-spacing: 0;
+}
+tr.checkedIn {
+    background-color: #9d0000;
+    color: #e84444;
+}
