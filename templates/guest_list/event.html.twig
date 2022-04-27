@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Guestlist | Event{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { font: 18px/1.5 sans-serif; }
+    .btn-checkin {
+        display: block;
+        border: 2px solid darkgreen;
+        padding: 4px;
+        background-color: green;
+        color: white;
+        text-decoration: none;
+    }
+    .btn-checkout {
+        display: block;
+        border: 2px solid #af0000;
+        padding: 4px;
+        background-color: #ff0000;
+        color: white;
+        text-decoration: none;
+    }
+    td {
+        border-top: 1px solid grey;
+        border-right: 1px solid grey;
+        padding: 10px;
+    }
+    table {
+        width: 80%;
+        padding: 0;
+        border-spacing: 0;
+    }
+    tr.checkedIn {
+        background-color: #9d0000;
+        color: #e84444;
+    }
+</style>
+
+<div class="example-wrapper">
+    <h1>Guestlist for {{ event.name }}</h1>
+
+    <input type="text" style="font-size: 30px;" placeholder="Search for guest">
+<hr>
+
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Pluses</th>
+            <th>Checked In</th>
+            <th></th>
+        </tr>
+        {% for guest in event.guests %}
+            <tr {{ (guest.checkInTime) ? 'class="checkedIn"' : '' }}>
+                <td>{{ guest.firstName }}</td>
+                <td>{{ guest.lastName }}</td>
+                <td>
+                    {% if guest.pluses %}
+                        (+{{ guest.pluses }})
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% if guest.checkInTime %}
+                        {{ guest.checkInTime|date('d.m.Y h:i') }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if guest.checkInTime %}
+                        <a href="checkOut" class="btn-checkout">Check Out</a>
+                    {% else %}
+                        <a href="checkin" class="btn-checkin">Check in</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

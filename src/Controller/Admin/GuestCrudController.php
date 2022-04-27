@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Guest;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class GuestCrudController extends AbstractCrudController
@@ -20,6 +22,8 @@ class GuestCrudController extends AbstractCrudController
             TextField::new('firstName'),
             TextField::new('lastName'),
             AssociationField::new('event'),
+            NumberField::new('pluses'),
+            DateTimeField::new('checkInTime')
         ];
     }
 }
