@@ -42,6 +42,11 @@ class Guest
      */
     private $checkInTime;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $checkedInPluses;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Guest
     public function setCheckInTime(?\DateTimeInterface $checkInTime): self
     {
         $this->checkInTime = $checkInTime;
+
+        return $this;
+    }
+
+    public function getCheckedInPluses(): ?int
+    {
+        return $this->checkedInPluses;
+    }
+
+    public function setCheckedInPluses(int $checkedInPluses): self
+    {
+        $this->checkedInPluses = $checkedInPluses;
 
         return $this;
     }
