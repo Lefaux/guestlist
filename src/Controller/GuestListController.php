@@ -33,8 +33,16 @@ class GuestListController extends AbstractController
      */
     public function event(Event $event): Response
     {
+        $guestCounter = 0;
+        foreach ($event->getGuests() as $guest) {
+            if ($guest->getCheckInTime()) {
+                $guestCounter++;
+            }
+        }
+        $percentage = (100 / count($event->getGuests()) * $guestCounter);
         return $this->render('guest_list/event.html.twig', [
             'event' => $event,
+            'percentage' => $percentage
         ]);
     }
 }

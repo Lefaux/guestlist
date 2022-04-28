@@ -6,8 +6,10 @@
     <h1>Guestlist for {{ event.name }}</h1>
 
     <input type="text" style="font-size: 30px;" placeholder="Search for guest">
-<hr>
-
+    <hr>
+    <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
+    </div>
     <table class="table">
         <tr>
             <th>First Name</th>
