@@ -1,4 +1,13 @@
 {
+    "deployer/deployer": {
+        "version": "v6.8.0"
+    },
+    "deployer/phar-update": {
+        "version": "v2.2.0"
+    },
+    "deployer/recipes": {
+        "version": "6.2.2"
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -94,6 +103,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
+    },
+    "pimple/pimple": {
+        "version": "v3.5.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -251,6 +263,9 @@
     },
     "symfony/polyfill-uuid": {
         "version": "v1.25.0"
+    },
+    "symfony/process": {
+        "version": "v5.4.8"
     },
     "symfony/property-access": {
         "version": "v5.4.8"
