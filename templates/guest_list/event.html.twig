@@ -3,13 +3,12 @@
 {% block title %}Guestlist | Event{% endblock %}
 
 {% block body %}
-<div class="example-wrapper">
     <h1>Guestlist for {{ event.name }}</h1>
 
     <input type="text" style="font-size: 30px;" placeholder="Search for guest">
 <hr>
 
-    <table>
+    <table class="table">
         <tr>
             <th>First Name</th>
             <th>Last Name</th>
@@ -18,7 +17,7 @@
             <th></th>
         </tr>
         {% for guest in event.guests %}
-            <tr {{ (guest.checkInTime) ? 'class="checkedIn"' : '' }}>
+            <tr {{ (guest.checkInTime) ? 'class="bg-danger"' : '' }}>
                 <td>{{ guest.firstName }}</td>
                 <td>{{ guest.lastName }}</td>
                 <td>
@@ -34,9 +33,9 @@
                 </td>
                 <td>
                     {% if guest.checkInTime %}
-                        <a href="checkOut" class="btn-checkout">Check Out</a>
+                        <a href="checkOut" class="btn btn-warning">Check Out</a>
                     {% else %}
-                        <a href="checkin" class="btn-checkin">Check in</a>
+                        <a href="checkin" class="btn btn-success">Check in</a>
                     {% endif %}
 
                 </td>
@@ -44,6 +43,5 @@
         {% endfor %}
     </table>
 
-    <a href="{{ path('app_guest_list') }}" class="btn">Back to list</a>
-</div>
+    <a href="{{ path('app_guest_list') }}" class="btn btn-info">Back to list</a>
 {% endblock %}

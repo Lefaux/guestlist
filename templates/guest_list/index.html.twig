@@ -4,22 +4,19 @@
 
 {% block body %}
 
-<div class="example-wrapper">
     <h1>Guestlist</h1>
-    <table>
+    <table class="table">
         <tr>
             <th>Event</th>
             <th>Total Guests</th>
             <th></th>
         </tr>
-
-        {% for event in events %}
-            <tr>
+    {% for event in events %}
+        <tr>
             <td>{{ event.name }}</td>
             <td>{{ event.guests|length }}</td>
-            <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn-checkin">SELECT</a></td>
-            </tr>
-        {% endfor %}
+            <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn-success">SELECT</a></td>
+        </tr>
+    {% endfor %}
     </table>
-</div>
 {% endblock %}
