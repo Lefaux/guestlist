@@ -3,12 +3,15 @@
 {% block title %}Guestlist | Event{% endblock %}
 
 {% block body %}
-    <h1>Guestlist for {{ event.name }}</h1>
+    <h1>Guestlist for <span class="text-info">{{ event.name }}</span></h1>
 
-    <input type="text" style="font-size: 30px;" placeholder="Search for guest">
+    <div class="form-group">
+        <input type="text" class="form-control form-control-lg" id="searchbox" placeholder="Search for guest">
+    </div>
     <hr>
-    <div class="progress">
+    <div class="progress" style="height: 30px;">
         <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
+        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ noShowPercentage }}%" aria-valuenow="{{ noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ noShowPercentage }}%</div>
     </div>
     <table class="table">
         <tr>
@@ -20,30 +23,56 @@
         </tr>
         {% for guest in event.guests %}
             <tr {{ (guest.checkInTime) ? 'class="bg-danger"' : '' }}>
-                <td>{{ guest.firstName }}</td>
-                <td>{{ guest.lastName }}</td>
-                <td>
+                <td class="align-middle">{{ guest.firstName }}</td>
+                <td class="align-middle">{{ guest.lastName }}</td>
+                <td class="align-middle">
                     {% if guest.pluses %}
                         (+{{ guest.pluses }})
                     {% endif %}
-
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if guest.checkInTime %}
                         {{ guest.checkInTime|date('d.m.Y h:i') }}
                     {% endif %}
                 </td>
                 <td>
                     {% if guest.checkInTime %}
-                        <a href="checkOut" class="btn btn-warning">Check Out</a>
+                        <a href="#" class="btn btn-warning d-block" data-bs-toggle="modal" data-bs-target="#modal-{{ guest.id }}">Check Out</a>
                     {% else %}
-                        <a href="checkin" class="btn btn-success">Check in</a>
+                        <a href="#" class="btn btn-success d-block" data-bs-toggle="modal" data-bs-target="#modal-{{ guest.id }}">Check in</a>
                     {% endif %}
-
                 </td>
             </tr>
         {% endfor %}
     </table>
 
+{# Render modals#}
+    {% for guest in event.guests %}
+        <div class="modal" tabindex="-1" id="modal-{{ guest.id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Check In {{ guest.firstName }} {{ guest.lastname }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% if guest.pluses %}
+                        <h3>{{ guest.firstName }} {{ guest.lastName }} was accompanied by</h3>
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            {% for counter in range(0, guest.pluses) %}
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradio{{ counter }}" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary" for="btnradio{{ counter }}">+ {{ counter }}</label>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Check in</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
     <a href="{{ path('app_guest_list') }}" class="btn btn-info">Back to list</a>
 {% endblock %}

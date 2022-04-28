@@ -1,3 +1,11 @@
 $body-bg: #000;
 $body-color: #ccc;
+$font-family-base: 'Montserrat', sans-serif;
+$headings-font-family: 'Teko', sans-serif;
+$modal-content-bg: #333;
+$primary: #ff0000;
 @import "bootstrap";
+
+.progress-bar {
+  font-size: 20px;
+}
