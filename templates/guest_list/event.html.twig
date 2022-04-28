@@ -8,11 +8,6 @@
     <div class="form-group">
         <input type="text" class="form-control form-control-lg" id="searchbox" placeholder="Search for guest">
     </div>
-    <hr>
-    <div class="progress" style="height: 30px;">
-        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
-        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ noShowPercentage }}%" aria-valuenow="{{ noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ noShowPercentage }}%</div>
-    </div>
     <table class="table">
         <tr>
             <th>First Name</th>
@@ -27,7 +22,11 @@
                 <td class="align-middle">{{ guest.lastName }}</td>
                 <td class="align-middle">
                     {% if guest.pluses %}
-                        (+{{ guest.pluses }})
+                        {% if guest.checkInTime %}
+                            +{{ guest.checkedInPluses }} / {{ guest.pluses }}
+                        {% else %}
+                            +{{ guest.pluses }}
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td class="align-middle">
@@ -45,6 +44,25 @@
             </tr>
         {% endfor %}
     </table>
+
+    <hr>
+    <div class="progress" style="height: 30px;">
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
+        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ noShowPercentage }}%" aria-valuenow="{{ noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ noShowPercentage }}%</div>
+    </div>
+    <table class="table table-sm">
+        <tr>
+            <th># Guests</th>
+            <th># Checked In</th>
+            <th># No Show</th>
+        </tr>
+        <tr>
+            <td>{{ counters.totalExpectedGuests }}</td>
+            <td>{{ counters.totalCheckedIn }}</td>
+            <td>{{ counters.totalNoShows }}</td>
+        </tr>
+    </table>
+    <hr>
 
 {# Render modals#}
     {% for guest in event.guests %}

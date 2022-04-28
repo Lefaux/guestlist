@@ -23,7 +23,8 @@ class GuestCrudController extends AbstractCrudController
             TextField::new('lastName'),
             AssociationField::new('event'),
             NumberField::new('pluses'),
-            DateTimeField::new('checkInTime')
+            DateTimeField::new('checkInTime'),
+            NumberField::new('checkedInPluses'),
         ];
     }
 }

@@ -50,7 +50,12 @@ class GuestListController extends AbstractController
         return $this->render('guest_list/event.html.twig', [
             'event' => $event,
             'percentage' => round($percentage),
-            'noShowPercentage' => round($noShow)
+            'noShowPercentage' => round($noShow),
+            'counters' => [
+                'totalExpectedGuests' => $guestCounter,
+                'totalCheckedIn' => $checkedInGuestCounter,
+                'totalNoShows' => $noShowCounter,
+            ]
         ]);
     }
 }
