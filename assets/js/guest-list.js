@@ -1,4 +1,4 @@
-import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
+import Modal from 'bootstrap/js/dist/modal';
 
 const SELECTOR_GUEST_LIST_TABLE = '#guest-list-table';
 const SELECTOR_EVENT_STATISTICS_CONTAINER = '#event-statistics';
@@ -94,7 +94,7 @@ document.addEventListener('guestlist:list-loaded', function () {
                 }
             }
 
-            const modal = new bootstrap.Modal(checkinModal, {
+            const modal = new Modal(checkinModal, {
                 backdrop: 'static'
             });
             disposeModalOnClose(checkinModal);
@@ -152,7 +152,7 @@ document.addEventListener('guestlist:list-loaded', function () {
             injectData(row.dataset, checkoutModal);
             document.body.appendChild(checkoutModal);
 
-            const modal = new bootstrap.Modal(checkoutModal, {
+            const modal = new Modal(checkoutModal, {
                 backdrop: 'static'
             });
             disposeModalOnClose(checkoutModal);
@@ -214,7 +214,7 @@ function handleAjaxError(data) {
     const errorModal = document.querySelector('#error-modal');
     injectData(data, errorModal);
 
-    const modal = new bootstrap.Modal(errorModal, {
+    const modal = new Modal(errorModal, {
         backdrop: 'static'
     });
     modal.show();
