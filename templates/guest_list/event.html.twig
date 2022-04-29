@@ -9,9 +9,9 @@
         <input type="text" class="form-control form-control-lg" id="searchbox" placeholder="Search for guest">
     </div>
 
-    <table class="table table-dark table-striped my-4" id="guest-list-table" data-event-id="{{ event.id }}">
+    <table class="table my-4" id="guest-list-table" data-event-id="{{ event.id }}">
         <thead>
-            <tr>
+            <tr class="text-white text-uppercase bg-secondary">
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Pluses</th>
@@ -51,7 +51,7 @@
     <hr>
 
     <template id="guest-list-row-not-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="text-white">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
@@ -65,7 +65,7 @@
     </template>
 
     <template id="guest-list-row-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="border-danger">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="bg-danger text-white">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
