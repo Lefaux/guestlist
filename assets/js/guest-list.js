@@ -1,8 +1,12 @@
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
 
 const SELECTOR_GUEST_LIST_TABLE = '#guest-list-table';
+const SELECTOR_CHECKIN_BUTTON = '[data-action="check-in"]';
 const SELECTOR_CHECKOUT_BUTTON = '[data-action="check-out"]';
+const SELECTOR_CHECKIN_MODAL_TEMPLATE = '#check-in-modal';
+const SELECTOR_CHECKIN_MODAL_PLUS_BUTTON_TEMPLATE = '#modal-plus-button';
 const SELECTOR_CHECKOUT_MODAL_TEMPLATE = '#check-out-modal';
+const SELECTOR_BUTTON_IN_PROGRESS = '#button-in-progress';
 const SELECTOR_GUEST_NOT_CHECKED_IN_TEMPLATE = '#guest-list-row-not-checked-in';
 const SELECTOR_GUEST_CHECKED_IN_TEMPLATE = '#guest-list-row-checked-in';
 
@@ -39,12 +43,89 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('guestlist:list-loaded', function () {
     const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
     guestListTable.addEventListener('click', function (event) {
+        if (event.target.matches(SELECTOR_CHECKIN_BUTTON)) {
+            const row = event.target.closest('tr');
+            const guestId = row.dataset.guestId;
+            const pluses = row.dataset.pluses;
+            const checkinModal = getFromTemplate(SELECTOR_CHECKIN_MODAL_TEMPLATE)
+
+            injectData(row.dataset, checkinModal);
+            document.body.appendChild(checkinModal);
+
+            const plusButtonContainer = document.querySelector('form');
+            if (pluses > 0) {
+                plusButtonContainer.removeAttribute('hidden');
+                const plusButtons = document.getElementById('plusesButtons');
+
+                for (let i = 0; i <= pluses; ++i) {
+                    const plusButton = getFromTemplate(SELECTOR_CHECKIN_MODAL_PLUS_BUTTON_TEMPLATE);
+                    const input = plusButton.querySelector('input');
+                    const label = plusButton.querySelector('label');
+                    input.id += i.toString();
+                    input.value = i.toString();
+                    label.setAttribute('for', label.getAttribute('for') + i.toString());
+                    injectData({value: i}, plusButton);
+
+                    plusButtons.append(plusButton);
+                }
+            }
+
+            const modal = new bootstrap.Modal(checkinModal, {
+                backdrop: 'static'
+            });
+            disposeModalOnClose(checkinModal);
+            modal.show();
+
+            plusButtonContainer.addEventListener('submit', async function (submitEvent) {
+                submitEvent.preventDefault();
+
+                event.target.disabled = true;
+                event.target.innerHTML = '';
+                event.target.appendChild(getFromTemplate(SELECTOR_BUTTON_IN_PROGRESS));
+
+                let checkedInPluses = null;
+                const plusButtonContainer = document.querySelector('form');
+                if (plusButtonContainer !== null) {
+                    let selectedCheckedInPluses;
+                    if ((selectedCheckedInPluses = document.querySelector('input[name="checkedInPluses"]:checked')) !== null) {
+                        checkedInPluses = selectedCheckedInPluses.value;
+                    }
+                }
+                await fetch('/json/checkin/' + guestId, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        checkedInPluses: checkedInPluses
+                    }),
+                }).then(async function (response) {
+                    response.json().then(function (data) {
+                        modal.hide();
+
+                        if (!response.ok) {
+                            handleAjaxError(data);
+                            return;
+                        }
+
+                        document.querySelector(SELECTOR_GUEST_LIST_TABLE).dispatchEvent(new CustomEvent('guestlist:record-updated', {
+                            detail: {
+                                guestId: guestId,
+                                data: data
+                            }
+                        }));
+                    });
+                });
+            });
+        }
+
         if (event.target.matches(SELECTOR_CHECKOUT_BUTTON)) {
             const row = event.target.closest('tr');
             const guestId = row.dataset.guestId;
             const checkoutModal = getFromTemplate(SELECTOR_CHECKOUT_MODAL_TEMPLATE)
 
-            injectData(row.dataset, checkoutModal)
+            injectData(row.dataset, checkoutModal);
             document.body.appendChild(checkoutModal);
 
             const modal = new bootstrap.Modal(checkoutModal, {
@@ -53,7 +134,11 @@ document.addEventListener('guestlist:list-loaded', function () {
             disposeModalOnClose(checkoutModal);
             modal.show();
 
-            checkoutModal.querySelector('[data-action="perform-check-out"]').addEventListener('click', async function (clickEvent) {
+            checkoutModal.querySelector('[data-action="perform-check-out"]').addEventListener('click', async function (event) {
+                event.target.disabled = true;
+                event.target.innerHTML = '';
+                event.target.appendChild(getFromTemplate(SELECTOR_BUTTON_IN_PROGRESS));
+
                 await fetch('/json/checkout/' + guestId, {
                     method: 'POST',
                     credentials: 'same-origin'
