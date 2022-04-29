@@ -10,8 +10,10 @@ const SELECTOR_CHECKOUT_MODAL_TEMPLATE = '#check-out-modal';
 const SELECTOR_BUTTON_IN_PROGRESS = '#button-in-progress';
 const SELECTOR_GUEST_NOT_CHECKED_IN_TEMPLATE = '#guest-list-row-not-checked-in';
 const SELECTOR_GUEST_CHECKED_IN_TEMPLATE = '#guest-list-row-checked-in';
+const SELECTOR_SEARCH_INPUT = '#searchbox';
 
 document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
     const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
     const guestListTableBody = document.querySelector(SELECTOR_GUEST_LIST_TABLE + ' tbody');
     const eventId = parseInt(guestListTable.dataset.eventId, 10);
@@ -40,9 +42,28 @@ document.addEventListener('DOMContentLoaded', function () {
         currentGuestRow.replaceWith(computedGuestRow);
         loadStats(event.detail.data.event);
     });
+
+    searchInput.addEventListener('input', debounce(function(event) {
+        const normalizedSearch = event.target.value.toLowerCase();
+
+        const rows = Array.from(guestListTable.querySelectorAll('tr[data-first-name][data-last-name]'));
+        rows.forEach(function (row) {
+            const normalizedFirstName = row.dataset.firstName.toLowerCase();
+            const normalizedLastName = row.dataset.lastName.toLowerCase();
+
+            if (normalizedFirstName.startsWith(normalizedSearch) || normalizedLastName.startsWith(normalizedSearch)) {
+                row.hidden = false;
+            } else {
+                row.hidden = true;
+            }
+        });
+    }, 150));
 });
 
 document.addEventListener('guestlist:list-loaded', function () {
+    const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
+    searchInput.disabled = false;
+
     const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
     guestListTable.addEventListener('click', function (event) {
         if (event.target.matches(SELECTOR_CHECKIN_BUTTON)) {
@@ -253,3 +274,21 @@ function composeGuestRow(data) {
 
     return rowFromTemplate;
 }
+
+/**
+ * Debounces event handler execution
+ */
+function debounce(func, wait) {
+    let timeout;
+
+    return function executedFunction() {
+        let context = this;
+        let args = arguments;
+
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            timeout = null;
+            func.apply(context, args);
+        }, wait);
+    };
+};
