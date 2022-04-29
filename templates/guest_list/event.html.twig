@@ -8,67 +8,73 @@
     <div class="form-group">
         <input type="text" class="form-control form-control-lg" id="searchbox" placeholder="Search for guest">
     </div>
-    <table class="table" id="guest-list">
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Pluses</th>
-            <th>Checked In</th>
-            <th></th>
-        </tr>
-        {% for guest in event.guests %}
-            <tr {{ (guest.checkInTime) ? 'class="bg-danger"' : '' }} data-guest-id="{{ guest.id }}" data-first-name="{{ guest.firstName }}" data-last-name="{{ guest.lastName }}" data-plusses="{{ guest.pluses }}">
-                <td class="align-middle">{{ guest.firstName }}</td>
-                <td class="align-middle">{{ guest.lastName }}</td>
-                <td class="align-middle">
-                    {% if guest.pluses %}
-                        {% if guest.checkInTime %}
-                            +{{ guest.checkedInPluses }} / {{ guest.pluses }}
-                        {% else %}
-                            +{{ guest.pluses }}
-                        {% endif %}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if guest.checkInTime %}
-                        {{ guest.checkInTime|date('d.m.Y h:i') }}
-                    {% endif %}
-                </td>
-                <td>
-                    <div class="d-grid">
-                        {% if guest.checkInTime %}
-                            <button type="button" class="btn btn-warning" data-action="check-out">Check Out</button>
-                        {% else %}
-                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-{{ guest.id }}">Check in</a>
-                        {% endif %}
-                    </div>
-                </td>
+
+    <table class="table table-dark table-striped my-4" id="guest-list-table" data-event-id="{{ event.id }}">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Pluses</th>
+                <th>Checked In</th>
+                <th></th>
             </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+        </tbody>
     </table>
 
     <hr>
-    <div class="progress" style="height: 30px;">
+    <div class="progress">
         <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
         <div class="progress-bar bg-danger" role="progressbar" style="width: {{ noShowPercentage }}%" aria-valuenow="{{ noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ noShowPercentage }}%</div>
     </div>
-    <table class="table table-sm">
-        <tr>
-            <th># Guests</th>
-            <th># Checked In</th>
-            <th># No Show</th>
-        </tr>
-        <tr>
-            <td>{{ counters.totalExpectedGuests }}</td>
-            <td>{{ counters.totalCheckedIn }}</td>
-            <td>{{ counters.totalNoShows }}</td>
-        </tr>
+    <table class="table table-sm table-dark table-striped">
+        <thead>
+            <tr>
+                <th># Guests</th>
+                <th># Checked In</th>
+                <th># No Show</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ counters.totalExpectedGuests }}</td>
+                <td>{{ counters.totalCheckedIn }}</td>
+                <td>{{ counters.totalNoShows }}</td>
+            </tr>
+        </tbody>
     </table>
     <hr>
 
-{# Render modals#}
+    <template id="guest-list-row-not-checked-in">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-plusses=".plusses">
+            <td class="align-middle" data-col="firstName" data-value="firstName"></td>
+            <td class="align-middle" data-col="lastName" data-value="lastName"></td>
+            <td class="align-middle" data-col="pluses"></td>
+            <td class="align-middle" data-col="checkInTime"></td>
+            <td>
+                <div class="d-grid" data-col="actions">
+                    <a href="#" class="btn btn-success" data-bs-toggle="modal">Check in</a>
+                </div>
+            </td>
+        </tr>
+    </template>
 
-    <template id="plusButton">
+    <template id="guest-list-row-checked-in">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-plusses=".plusses">
+            <td class="align-middle" data-col="firstName" data-value="firstName"></td>
+            <td class="align-middle" data-col="lastName" data-value="lastName"></td>
+            <td class="align-middle" data-col="pluses"></td>
+            <td class="align-middle" data-value="checkInTime"></td>
+            <td>
+                <div class="d-grid" data-col="actions">
+                    <button type="button" class="btn btn-warning" data-action="check-out">Check Out</button>
+                </div>
+            </td>
+        </tr>
+    </template>
+
+    <template id="modal-plus-buttons">
         <input type="radio" class="btn-check" name="btnradio" id="btnradio" autocomplete="off" checked>
         <label class="btn btn-outline-primary" for="btnradio">+ <span data-value="value"></span></label>
     </template>
