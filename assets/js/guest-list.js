@@ -232,7 +232,11 @@ function injectData(dataValues, domNode) {
             }
             const requestedDataKey = rootNode.getAttribute(attribute).substring(1);
             if (dataValues.hasOwnProperty(requestedDataKey)) {
-                rootNode.setAttribute(attribute, dataValues[requestedDataKey]);
+                if (null !== dataValues[requestedDataKey]) {
+                    rootNode.setAttribute(attribute, dataValues[requestedDataKey]);
+                } else {
+                    rootNode.setAttribute(attribute, '');
+                }
             }
         }
     }
@@ -240,7 +244,11 @@ function injectData(dataValues, domNode) {
     // Now fill all DOM nodes expecting a value
     for (const [key, value] of Object.entries(dataValues)) {
         Array.from(domNode.querySelectorAll('[data-value="' + key + '"]')).forEach(function (receiver) {
-            receiver.textContent = value;
+            if (null !== value) {
+                receiver.textContent = value;
+            } else {
+                receiver.textContent = '';
+            }
         });
     }
 }
