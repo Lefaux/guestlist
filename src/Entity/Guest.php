@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=GuestRepository::class)
  */
-class Guest
+class Guest implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -117,10 +117,23 @@ class Guest
         return $this->checkedInPluses;
     }
 
-    public function setCheckedInPluses(int $checkedInPluses): self
+    public function setCheckedInPluses(?int $checkedInPluses): self
     {
         $this->checkedInPluses = $checkedInPluses;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'pluses' => $this->getPluses(),
+            'event' => $this->getEvent() !== null ? $this->getEvent()->getId() : null,
+            'checkInTime' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->format(\DateTimeInterface::ATOM) : null,
+            'checkedInPluses' => $this->getCheckedInPluses(),
+        ];
     }
 }
