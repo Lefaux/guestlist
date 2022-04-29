@@ -124,8 +124,16 @@ class Guest implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        return get_object_vars($this);
+        return [
+            'id' => $this->getId(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'pluses' => $this->getPluses(),
+            'event' => $this->getEvent() !== null ? $this->getEvent()->getId() : null,
+            'checkInTime' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->format(\DateTimeInterface::ATOM) : null,
+            'checkedInPluses' => $this->getCheckedInPluses(),
+        ];
     }
 }
