@@ -8,7 +8,6 @@ $body-color: #ccc;
 $font-family-base: 'Montserrat', sans-serif;
 $headings-font-family: 'Teko', sans-serif;
 $modal-content-bg: #333;
-$primary: #ff0000;
 $progress-height: 1.5rem;
 $progress-font-size: $font-size-base;
 $progress-bar-bg: $gray-900; // todo: Y U NO WORK?
@@ -21,6 +20,7 @@ $progress-bar-bg: $gray-900; // todo: Y U NO WORK?
 @import "~bootstrap/scss/tables";
 @import "~bootstrap/scss/forms";
 @import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/button-group";
 @import "~bootstrap/scss/modal";
 @import "~bootstrap/scss/progress";
 @import "~bootstrap/scss/spinners";

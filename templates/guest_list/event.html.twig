@@ -47,21 +47,21 @@
     <hr>
 
     <template id="guest-list-row-not-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-plusses=".plusses">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
             <td class="align-middle" data-col="checkInTime"></td>
             <td>
                 <div class="d-grid" data-col="actions">
-                    <a href="#" class="btn btn-success" data-bs-toggle="modal">Check in</a>
+                    <button type="button" class="btn btn-success" data-action="check-in">Check In</button>
                 </div>
             </td>
         </tr>
     </template>
 
     <template id="guest-list-row-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-plusses=".plusses">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="border-danger">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
@@ -74,9 +74,11 @@
         </tr>
     </template>
 
-    <template id="modal-plus-buttons">
-        <input type="radio" class="btn-check" name="btnradio" id="btnradio" autocomplete="off" checked>
-        <label class="btn btn-outline-primary" for="btnradio">+ <span data-value="value"></span></label>
+    <template id="modal-plus-button">
+        <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" name="checkedInPluses" id="checkedInPluses_" autocomplete="off" required>
+            <label class="form-check-label" for="checkedInPluses_">+<span data-value="value"></span></label>
+        </div>
     </template>
 
     <template id="check-in-modal">
@@ -84,21 +86,19 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Check In <span data-value="firstName"></span> <span data-value="lastName"></span></h5>
+                        <h3 class="modal-title">Check In <span data-value="firstName"></span> <span data-value="lastName"></span></h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div data-value="pluses" hidden>
-                            <h3><span data-value="firstName"></span> <span data-value="lastName"></span> was accompanied by</h3>
+                        <form id="check-in-form" action="#" hidden>
+                            <h4><span data-value="firstName"></span> <span data-value="lastName"></span> was accompanied by</h4>
 
-                            <div id="plusesButtons" class="btn-group" role="group">
-                                <!-- renders #plusButton template via JS -->
-                            </div>
-                        </div>
+                            <div id="plusesButtons"></div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Check in</button>
+                        <button type="submit" class="btn btn-success" data-action="perform-check-in" form="check-in-form">Check in</button>
                     </div>
                 </div>
             </div>
@@ -110,7 +110,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Check Out <span data-value="firstName"></span> <span data-value="lastName"></span></h5>
+                        <h3 class="modal-title">Check Out <span data-value="firstName"></span> <span data-value="lastName"></span></h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-footer">
@@ -122,11 +122,15 @@
         </div>
     </template>
 
+    <template id="button-in-progress">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </template>
+
     <div class="modal" tabindex="-1" id="error-modal">
         <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Uncaught <span data-value="exception"></span></h5>
+                    <h3 class="modal-title">Uncaught <span data-value="exception"></span></h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

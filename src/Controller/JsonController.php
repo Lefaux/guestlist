@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -41,24 +42,28 @@ class JsonController extends AbstractController
     }
 
     /**
-     * @todo: call endpoint with POST method
-     * @Route("/json/checkin/{guest}", name="app_json_checkin")
+     * @Route("/json/checkin/{guest}", name="app_json_checkin", methods={"POST"})
      */
-    public function checkIn(Guest $guest): JsonResponse
+    public function checkIn(Guest $guest, Request $request): JsonResponse
     {
-        $status = 'NACK';
+        $payload = [];
+        if (($content = $request->getContent()) !== '') {
+            $payload = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        }
         $checkInTime = new \DateTime('now');
         try {
             $guest->setCheckInTime($checkInTime);
+            $guest->setCheckedInPluses($payload['checkedInPluses'] ?: 0);
             $this->entityManager->persist($guest);
             $this->entityManager->flush();
-            $status = 'ACK';
         } catch (\Exception $e) {
+            return $this->json([
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'stack' => $e->getTrace(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return $this->json([
-            'status' => $status,
-            'time' => $checkInTime->format(DateTimeInterface::ATOM)
-        ]);
+        return $this->json($guest);
     }
     /**
      * @Route("/json/checkout/{guest}", name="app_json_checkout", methods={"POST"})
