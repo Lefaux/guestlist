@@ -1,0 +1,18 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Guestlist | Import CSV{% endblock %}
+
+{% block main %}
+
+    <div class="alert alert-info">Daten erfolgreich importiert.</div>
+    <table class="table">
+    {% for guest in event.guests %}
+        <tr>
+            <td>{{ guest.firstName }}</td>
+            <td>{{ guest.lastName }}</td>
+            <td>{{ guest.pluses }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+{% endblock %}
