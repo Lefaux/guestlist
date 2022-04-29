@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Repository\EventRepository;
+use App\Service\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,10 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class GuestListController extends AbstractController
 {
     private EventRepository $eventRepository;
+    private EventService $eventService;
 
-    public function __construct(EventRepository $eventRepository)
+    public function __construct(EventRepository $eventRepository, EventService $eventService)
     {
         $this->eventRepository = $eventRepository;
+        $this->eventService = $eventService;
     }
 
     /**
@@ -33,29 +36,8 @@ class GuestListController extends AbstractController
      */
     public function event(Event $event): Response
     {
-        $guestCounter = 0;
-        $checkedInGuestCounter = 0;
-        $noShowCounter = 0;
-        foreach ($event->getGuests() as $guest) {
-            $guestCounter += ($guest->getPluses() + 1);
-            if ($guest->getCheckInTime()) {
-                $checkedInGuestCounter += ($guest->getCheckedInPluses() +1);
-                if ($guest->getCheckedInPluses() < $guest->getPluses()) {
-                    $noShowCounter += $guest->getPluses() - $guest->getCheckedInPluses();
-                }
-            }
-        }
-        $percentage = (100 / ($guestCounter) * $checkedInGuestCounter);
-        $noShow = (100 / $guestCounter * $noShowCounter);
-        return $this->render('guest_list/event.html.twig', [
+        return $this->render('guest_list/event.html.twig', array_merge([
             'event' => $event,
-            'percentage' => round($percentage),
-            'noShowPercentage' => round($noShow),
-            'counters' => [
-                'totalExpectedGuests' => $guestCounter,
-                'totalCheckedIn' => $checkedInGuestCounter,
-                'totalNoShows' => $noShowCounter,
-            ]
-        ]);
+        ], $this->eventService->getStatsForEvent($event)));
     }
 }

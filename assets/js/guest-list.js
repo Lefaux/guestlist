@@ -1,6 +1,7 @@
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle";
 
 const SELECTOR_GUEST_LIST_TABLE = '#guest-list-table';
+const SELECTOR_EVENT_STATISTICS_CONTAINER = '#event-statistics';
 const SELECTOR_CHECKIN_BUTTON = '[data-action="check-in"]';
 const SELECTOR_CHECKOUT_BUTTON = '[data-action="check-out"]';
 const SELECTOR_CHECKIN_MODAL_TEMPLATE = '#check-in-modal';
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const currentGuestRow = event.target.querySelector('[data-guest-id="' + event.detail.guestId + '"]');
 
         currentGuestRow.replaceWith(computedGuestRow);
+        loadStats(event.detail.data.event);
     });
 });
 
@@ -164,6 +166,28 @@ document.addEventListener('guestlist:list-loaded', function () {
     });
 });
 
+function loadStats(event) {
+    fetch('/json/stats/' + event, {
+        method: 'POST',
+        credentials: 'same-origin'
+    }).then(async function (response) {
+        response.json().then(function (data) {
+            const container = document.querySelector(SELECTOR_EVENT_STATISTICS_CONTAINER);
+            const percentageProgress = container.querySelector('[data-progress="percentage"]');
+            percentageProgress.style.width = data.percentages.percentage + '%';
+            percentageProgress.setAttribute('aria-valuenow', data.percentages.percentage);
+            percentageProgress.textContent = data.percentages.percentage + '%';
+
+            const noShowPercentageProgress = container.querySelector('[data-progress="no-show-percentage"]');
+            noShowPercentageProgress.style.width = data.percentages.noShowPercentage + '%';
+            noShowPercentageProgress.setAttribute('aria-valuenow', data.percentages.noShowPercentage);
+            noShowPercentageProgress.textContent = data.percentages.noShowPercentage + '%';
+
+            injectData(data.counters, container)
+        });
+    });
+}
+
 function handleAjaxError(data) {
     const errorModal = document.querySelector('#error-modal');
     injectData(data, errorModal);
@@ -179,13 +203,15 @@ function handleAjaxError(data) {
 function injectData(dataValues, domNode) {
     // Fill data attributes with dotted values
     const rootNode = domNode.getRootNode();
-    for (const attribute of rootNode.getAttributeNames()) {
-        if (!attribute.startsWith('data-')) {
-            continue;
-        }
-        const requestedDataKey = rootNode.getAttribute(attribute).substring(1);
-        if (dataValues.hasOwnProperty(requestedDataKey)) {
-            rootNode.setAttribute(attribute, dataValues[requestedDataKey]);
+    if (rootNode !== document) {
+        for (const attribute of rootNode.getAttributeNames()) {
+            if (!attribute.startsWith('data-')) {
+                continue;
+            }
+            const requestedDataKey = rootNode.getAttribute(attribute).substring(1);
+            if (dataValues.hasOwnProperty(requestedDataKey)) {
+                rootNode.setAttribute(attribute, dataValues[requestedDataKey]);
+            }
         }
     }
 

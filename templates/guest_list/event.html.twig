@@ -24,26 +24,30 @@
     </table>
 
     <hr>
-    <div class="progress">
-        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
-        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ noShowPercentage }}%" aria-valuenow="{{ noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ noShowPercentage }}%</div>
+
+    <div id="event-statistics">
+        <div class="progress">
+            <div data-progress="percentage" class="progress-bar bg-success" role="progressbar" style="width: {{ percentages.percentage }}%" aria-valuenow="{{ percentages.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentages.percentage }}%</div>
+            <div data-progress="no-show-percentage" class="progress-bar bg-danger" role="progressbar" style="width: {{ percentages.noShowPercentage }}%" aria-valuenow="{{ percentages.noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentages.noShowPercentage }}%</div>
+        </div>
+        <table class="table table-sm table-dark table-striped">
+            <thead>
+                <tr>
+                    <th># Guests</th>
+                    <th># Checked In</th>
+                    <th># No Show</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-value="totalExpectedGuests">{{ counters.totalExpectedGuests }}</td>
+                    <td data-value="totalCheckedIn">{{ counters.totalCheckedIn }}</td>
+                    <td data-value="totalNoShows">{{ counters.totalNoShows }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <table class="table table-sm table-dark table-striped">
-        <thead>
-            <tr>
-                <th># Guests</th>
-                <th># Checked In</th>
-                <th># No Show</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ counters.totalExpectedGuests }}</td>
-                <td>{{ counters.totalCheckedIn }}</td>
-                <td>{{ counters.totalNoShows }}</td>
-            </tr>
-        </tbody>
-    </table>
+
     <hr>
 
     <template id="guest-list-row-not-checked-in">

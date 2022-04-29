@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Guest;
-use DateTimeInterface;
+use App\Service\EventService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,12 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class JsonController extends AbstractController
 {
-
     private EntityManagerInterface $entityManager;
+    private EventService $eventService;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, EventService $eventService)
     {
         $this->entityManager = $entityManager;
+        $this->eventService = $eventService;
     }
 
     /**
@@ -65,6 +66,7 @@ class JsonController extends AbstractController
         }
         return $this->json($guest);
     }
+
     /**
      * @Route("/json/checkout/{guest}", name="app_json_checkout", methods={"POST"})
      */
@@ -84,5 +86,13 @@ class JsonController extends AbstractController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         return $this->json($guest);
+    }
+
+    /**
+     * @Route("/json/stats/{event}", name="app_json_stats", methods={"POST"})
+     */
+    public function getStats(Event $event): Response
+    {
+        return $this->json($this->eventService->getStatsForEvent($event));
     }
 }
