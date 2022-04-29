@@ -133,6 +133,7 @@ class Guest implements \JsonSerializable
             'pluses' => $this->getPluses(),
             'event' => $this->getEvent() !== null ? $this->getEvent()->getId() : null,
             'checkInTime' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->format('d.m.Y H:i') : null,
+            'checkInTimestamp' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->getTimestamp() : 0,
             'checkedInPluses' => $this->getCheckedInPluses(),
         ];
     }
