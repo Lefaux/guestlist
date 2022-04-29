@@ -76,7 +76,6 @@ class JsonController extends AbstractController
 
             $this->entityManager->persist($guest);
             $this->entityManager->flush();
-            $this->entityManager->refresh($guest);
         } catch (\Exception $e) {
             return $this->json([
                 'exception' => get_class($e),
