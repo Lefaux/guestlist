@@ -72,7 +72,7 @@ class JsonController extends AbstractController
     {
         try {
             $guest->setCheckInTime(null);
-            $guest->setCheckedInPluses(0);
+            $guest->setCheckedInPluses(null);
 
             $this->entityManager->persist($guest);
             $this->entityManager->flush();

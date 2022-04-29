@@ -117,7 +117,7 @@ class Guest implements \JsonSerializable
         return $this->checkedInPluses;
     }
 
-    public function setCheckedInPluses(int $checkedInPluses): self
+    public function setCheckedInPluses(?int $checkedInPluses): self
     {
         $this->checkedInPluses = $checkedInPluses;
 
