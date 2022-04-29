@@ -1,0 +1,8 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Guestlist | Error{% endblock %}
+
+{% block main %}
+    <div class="alert alert-danger">{{errors}}</div>
+    <br><a href="{{ ea_url().setRoute('admin_import') }}" class="btn btn-info">Back</a>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Guestlist | Import CSV{% endblock %}
+
+{% block main %}
+
+    <div class="alert alert-danger">Durch das Hochladen einer neuen Liste werden <b>alle</b> (!) alten Gäste bei diesem Event gelöscht!</div>
+    <hr>
+    <form action="{{ ea_url().setRoute('admin_import_upload') }}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="csv-file" class="form-label">CSV-Datei der Gästeliste</label>
+            <input type="file" name="csvfile" class="form-control" id="csv-file" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">Durch das Hochladen einer neuen Liste werden alle (!) alten Gäste bei diesem Event gelöscht!</div>
+        </div>
+        <div class="mb-3">
+            <select class="form-select form-select-lg" name="eventId">
+                <option selected>Select an Event</option>
+                {% for event in events %}
+                    <option value="{{ event.id }}">{{ event.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
