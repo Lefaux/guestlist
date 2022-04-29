@@ -8,7 +8,7 @@
     <div class="form-group">
         <input type="text" class="form-control form-control-lg" id="searchbox" placeholder="Search for guest">
     </div>
-    <table class="table">
+    <table class="table" id="guest-list">
         <tr>
             <th>First Name</th>
             <th>Last Name</th>
@@ -17,7 +17,7 @@
             <th></th>
         </tr>
         {% for guest in event.guests %}
-            <tr {{ (guest.checkInTime) ? 'class="bg-danger"' : '' }}>
+            <tr {{ (guest.checkInTime) ? 'class="bg-danger"' : '' }} data-guest-id="{{ guest.id }}" data-first-name="{{ guest.firstName }}" data-last-name="{{ guest.lastName }}" data-plusses="{{ guest.pluses }}">
                 <td class="align-middle">{{ guest.firstName }}</td>
                 <td class="align-middle">{{ guest.lastName }}</td>
                 <td class="align-middle">
@@ -35,11 +35,13 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if guest.checkInTime %}
-                        <a href="#" class="btn btn-warning d-block" data-bs-toggle="modal" data-bs-target="#modal-{{ guest.id }}">Check Out</a>
-                    {% else %}
-                        <a href="#" class="btn btn-success d-block" data-bs-toggle="modal" data-bs-target="#modal-{{ guest.id }}">Check in</a>
-                    {% endif %}
+                    <div class="d-grid">
+                        {% if guest.checkInTime %}
+                            <button type="button" class="btn btn-warning" data-action="check-out">Check Out</button>
+                        {% else %}
+                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-{{ guest.id }}">Check in</a>
+                        {% endif %}
+                    </div>
                 </td>
             </tr>
         {% endfor %}
@@ -65,24 +67,28 @@
     <hr>
 
 {# Render modals#}
-    {% for guest in event.guests %}
-        <div class="modal" tabindex="-1" id="modal-{{ guest.id }}">
-            <div class="modal-dialog">
+
+    <template id="plusButton">
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio" autocomplete="off" checked>
+        <label class="btn btn-outline-primary" for="btnradio">+ <span data-value="value"></span></label>
+    </template>
+
+    <template id="check-in-modal">
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Check In {{ guest.firstName }} {{ guest.lastname }}</h5>
+                        <h5 class="modal-title">Check In <span data-value="firstName"></span> <span data-value="lastName"></span></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {% if guest.pluses %}
-                        <h3>{{ guest.firstName }} {{ guest.lastName }} was accompanied by</h3>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            {% for counter in range(0, guest.pluses) %}
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio{{ counter }}" autocomplete="off" checked>
-                                <label class="btn btn-outline-primary" for="btnradio{{ counter }}">+ {{ counter }}</label>
-                            {% endfor %}
+                        <div data-value="pluses" hidden>
+                            <h3><span data-value="firstName"></span> <span data-value="lastName"></span> was accompanied by</h3>
+
+                            <div id="plusesButtons" class="btn-group" role="group">
+                                <!-- renders #plusButton template via JS -->
+                            </div>
                         </div>
-                        {% endif %}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -91,6 +97,40 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
+    </template>
+
+    <template id="check-out-modal">
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Check Out <span data-value="firstName"></span> <span data-value="lastName"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" data-action="perform-check-out">Check out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="modal" tabindex="-1" id="error-modal">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Uncaught <span data-value="exception"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span data-value="message"></span><br><br>
+                    Stack trace:
+                    <pre></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <a href="{{ path('app_guest_list') }}" class="btn btn-info">Back to list</a>
 {% endblock %}
