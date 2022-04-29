@@ -6,13 +6,13 @@
 
     <h1>Guestlist</h1>
     <table class="table">
-        <tr>
+        <tr class="text-white text-uppercase bg-secondary">
             <th>Event</th>
             <th>Total Guests</th>
             <th></th>
         </tr>
     {% for event in events %}
-        <tr>
+        <tr class="text-white">
             <td>{{ event.name }}</td>
             <td>{{ event.guests|length }}</td>
             <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn-success">SELECT</a></td>
