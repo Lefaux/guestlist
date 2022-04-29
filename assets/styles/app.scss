@@ -1,11 +1,28 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/utilities";
+
 $body-bg: #000;
 $body-color: #ccc;
 $font-family-base: 'Montserrat', sans-serif;
 $headings-font-family: 'Teko', sans-serif;
 $modal-content-bg: #333;
 $primary: #ff0000;
-@import "bootstrap";
+$progress-height: 1.5rem;
+$progress-font-size: $font-size-base;
+$progress-bar-bg: $gray-900; // todo: Y U NO WORK?
 
-.progress-bar {
-  font-size: 20px;
-}
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/close";
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/spinners";
+@import "~bootstrap/scss/helpers";
+@import "~bootstrap/scss/utilities/api";

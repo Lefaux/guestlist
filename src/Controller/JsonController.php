@@ -26,23 +26,18 @@ class JsonController extends AbstractController
      */
     public function index(Event $event): JsonResponse
     {
-        $guests = [];
-        foreach ($event->getGuests() as $guest) {
-            $guests[] = [
-                'id' => $guest->getId(),
-                'firstName' => $guest->getFirstName(),
-                'lastName' => $guest->getLastName(),
-                'pluses' => $guest->getPluses(),
-                'checkedInTime' => $guest->getCheckInTime()
-            ];
-        }
         return $this->json([
-            'event' => [
-                'id' => $event->getId(),
-                'name' => $event->getName(),
-                'guests' => $guests
-            ]
+            'id' => $event->getId(),
+            'name' => $event->getName(),
         ]);
+    }
+
+    /**
+     * @Route("/json/{event}/guests", name="app_json_get_guests", methods={"GET"})
+     */
+    public function getGuests(Event $event): Response
+    {
+        return $this->json($event->getGuests()->toArray());
     }
 
     /**
