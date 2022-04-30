@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Guestlist | Host View{% endblock %}
+
+{% block body %}
+
+    <h1>Statistics for <span class="text-info">{{ event.name }}</span></h1>
+    <div id="event-statistics">
+        <div class="progress" style="height: 6rem;">
+            <div data-progress="percentage" class="progress-bar bg-success" role="progressbar" style="font-size: 4rem; width: {{ stats.percentages.percentage }}%" aria-valuenow="{{ stats.percentages.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ stats.percentages.percentage }}%</div>
+            <div data-progress="no-show-percentage" class="progress-bar bg-danger" role="progressbar" style="font-size: 4rem; width: {{ stats.percentages.noShowPercentage }}%" aria-valuenow="{{ stats.percentages.noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ stats.percentages.noShowPercentage }}%</div>
+        </div>
+        <hr>
+        <table class="table table-sm table-dark table-striped" style="font-size: 4rem">
+            <tr>
+                <td># Guests</td>
+                <td data-value="totalExpectedGuests" class="text-end">{{ stats.counters.totalExpectedGuests }}</td>
+            </tr>
+            <tr>
+                <td># Checked In</td>
+                <td data-value="totalCheckedIn" class="text-end">{{ stats.counters.totalCheckedIn }}</td>
+            </tr>
+            <tr>
+                <td># No Show</td>
+                <td data-value="totalNoShows" class="text-end">{{ stats.counters.totalNoShows }}</td>
+            </tr>
+        </table>
+    </div>
+    <a href="{{ path('app_guest_list') }}" class="btn btn-info">Back to list</a>
+{% endblock %}

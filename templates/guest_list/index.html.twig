@@ -10,12 +10,14 @@
             <th>Event</th>
             <th>Total Guests</th>
             <th></th>
+            <th></th>
         </tr>
     {% for event in events %}
         <tr class="text-white">
             <td>{{ event.name }}</td>
             <td>{{ event.totalGuests }}</td>
             <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn-success">SELECT</a></td>
+            <td><a href="{{ path('app_host', { event:event.id }) }}" class="btn btn-info">ORGANIZER VIEW</a></td>
         </tr>
     {% endfor %}
     </table>
