@@ -14,7 +14,7 @@
     {% for event in events %}
         <tr class="text-white">
             <td>{{ event.name }}</td>
-            <td>{{ event.guests|length }}</td>
+            <td>{{ event.totalGuests }}</td>
             <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn-success">SELECT</a></td>
         </tr>
     {% endfor %}

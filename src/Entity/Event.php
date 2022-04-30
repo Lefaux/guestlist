@@ -82,6 +82,16 @@ class Event
         return $this;
     }
 
+    public function getTotalGuests(): int
+    {
+        $totalGuests = 0;
+        /** @var Guest $guest */
+        foreach ($this->guests as $guest) {
+            $totalGuests += ((int)$guest->getPluses() + 1);
+        }
+        return $totalGuests;
+    }
+
     public function __toString()
     {
         return (string)$this->name;
