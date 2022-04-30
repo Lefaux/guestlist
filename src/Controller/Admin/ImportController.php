@@ -5,9 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Event;
 use App\Entity\Guest;
 use App\Repository\EventRepository;
-use App\Repository\GuestRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
 use Exception;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,21 +16,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class ImportController extends AbstractController
 {
     private EventRepository $eventRepository;
-    private GuestRepository $guestRepository;
     private EntityManagerInterface $entityManager;
-    private AdminContextProvider $adminContextProvider;
 
     public function __construct(
         EventRepository $eventRepository,
-        GuestRepository $guestRepository,
-        EntityManagerInterface $entityManager,
-        AdminContextProvider $adminContextProvider
+        EntityManagerInterface $entityManager
     )
     {
         $this->eventRepository = $eventRepository;
-        $this->guestRepository = $guestRepository;
         $this->entityManager = $entityManager;
-        $this->adminContextProvider = $adminContextProvider;
     }
 
     /**
