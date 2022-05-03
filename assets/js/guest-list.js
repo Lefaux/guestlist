@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 rows.appendChild(guestRow);
             }
             guestListTableBody.appendChild(rows);
+            showHideCheckedInRow();
 
             document.dispatchEvent(new CustomEvent('guestlist:list-loaded'));
         })
@@ -312,6 +313,19 @@ function sortRows() {
     intermediateTableContents.appendChild(intermediateTableBody);
     intermediateTableBody.append(...rows);
     guestListTableBody.replaceWith(intermediateTableContents);
+    showHideCheckedInRow();
+}
+
+function showHideCheckedInRow() {
+    const showHiddenGuests = document.getElementById('showCheckedInGuests').checked;
+    const collection = document.getElementsByClassName("row-checked-in");
+    for (let i = 0; i < collection.length; i++) {
+        if (showHiddenGuests) {
+            collection[i].style.display = "table-row";
+        } else {
+            collection[i].style.display = "none";
+        }
+    }
 }
 
 /**
