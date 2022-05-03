@@ -4,12 +4,14 @@ use Symfony\Component\Dotenv\Dotenv;
 
 require 'recipe/common.php';
 require 'recipe/rsync.php';
+require 'recipe/cachetool.php';
 require './vendor/autoload.php';
 
 (new Dotenv(true))->loadEnv(dirname(__DIR__).'/html/.env.local');
 
 // Configuration
 set('application', 'guestlist');
+set('hostname', getenv('DOMAIN'));
 set('repository', getenv('REPO'));
 set('ssh_type', 'native');
 set('keep_releases', '3');
@@ -45,6 +47,8 @@ set('rsync',[
 ]);
 set('rsync_src', __DIR__);
 set('rsync_dest','{{release_path}}');
+
+set('cachetool_args', '--web --web-path=./public --web-url=https://{{hostname}}');
 // Hosts
 
 host(getenv('HOST'))
@@ -59,14 +63,15 @@ host(getenv('HOST'))
 /**
  * This was in, but shouldn't be here
  */
-//task('yarn', function () {
-//    run('composer install');
-//    run('yarn install');
-//    run('yarn build');
-//})->local();
+task('yarn', function () {
+    runLocally('composer install');
+    runLocally('yarn install');
+    runLocally('yarn build');
+})->local();
 
 // Tasks
 task('deploy', [
+    'yarn',
     'deploy:info',
     'deploy:prepare',
     'deploy:lock',
@@ -78,6 +83,7 @@ task('deploy', [
     'cleanup',
 ])->desc('Deploy your project');
 after('deploy', 'success');
+after('deploy:symlink', 'cachetool:clear:opcache');
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
