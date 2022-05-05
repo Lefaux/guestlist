@@ -14,7 +14,13 @@
             <th></th>
         </tr>
     {% for event in events %}
-        <tr class="text-white">
+        {%set tableClass = 'text-white' %}
+        {% if  event.eventStart|date("Ymd") < 'now'|date("Ymd") %}
+            {%set tableClass = 'text-muted' %}
+        {% elseif event.eventStart|date("Ymd") == 'now'|date("Ymd") %}
+            {%set tableClass = 'text-black bg-warning' %}
+        {% endif %}
+        <tr class=" {{ tableClass }}">
             <td>{{ event.eventStart|date("d.m.Y") }}</td>
             <td>{{ event.name }}</td>
             <td>{{ event.totalGuests }}</td>
