@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Event;
 use App\Form\GuestType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -22,6 +23,7 @@ class EventCrudController extends AbstractCrudController
         return $crud
             ->setDefaultSort(['eventStart' => 'DESC'])
             ->setDateFormat('dd.MM.Y (eeee)')
+            ->showEntityActionsInlined()
             ;
     }
 
@@ -36,6 +38,7 @@ class EventCrudController extends AbstractCrudController
                 ->allowDelete()
                 ->setEntryType(GuestType::class)
                 ->setEntryIsComplex(true)
+                ->setSortable(false)
 
         ];
     }
