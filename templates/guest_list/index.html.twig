@@ -26,8 +26,16 @@
             <td>{{ event.eventStart|date("d.m.Y") }}</td>
             <td>{{ event.name }}</td>
             <td>{{ event.totalGuests }}</td>
-            <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn{{  buttonClass}}-success">SELECT</a></td>
-            <td><a href="{{ path('app_host', { event:event.id }) }}" class="btn btn{{  buttonClass}}-info">ORGANIZER VIEW</a></td>
+            <td>
+                {% if event.totalGuests > 0 %}
+                    <a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn{{  buttonClass}}-success">SELECT</a>
+                {% endif %}
+            </td>
+            <td>
+                {% if event.totalGuests > 0 %}
+                    <a href="{{ path('app_host', { event:event.id }) }}" class="btn btn{{  buttonClass}}-info">ORGANIZER VIEW</a>
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
     </table>
