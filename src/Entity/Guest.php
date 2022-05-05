@@ -33,7 +33,7 @@ class Guest implements \JsonSerializable
     private $pluses;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="guests")
+     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="guests", cascade={"persist"})
      */
     private $event;
 
@@ -46,6 +46,11 @@ class Guest implements \JsonSerializable
      * @ORM\Column(type="integer", nullable=true)
      */
     private $checkedInPluses;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $vip;
 
     public function getId(): ?int
     {
@@ -135,6 +140,31 @@ class Guest implements \JsonSerializable
             'checkInTime' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->format('d.m.Y H:i') : null,
             'checkInTimestamp' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->getTimestamp() : 0,
             'checkedInPluses' => $this->getCheckedInPluses(),
+            'vip' => $this->getVip()
         ];
+    }
+
+    public function getVip(): ?bool
+    {
+        return $this->vip;
+    }
+
+    public function setVip(bool $vip): self
+    {
+        $this->vip = $vip;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        $renderedString = $this->firstName . ' ' . $this->lastName;
+        if ($this->getVip()) {
+            $renderedString = '[VIP] ' . $renderedString;
+        }
+        if ((int) $this->getPluses() > 0) {
+            $renderedString .= ' +' . (int)$this->getPluses();
+        }
+        return $renderedString;
     }
 }

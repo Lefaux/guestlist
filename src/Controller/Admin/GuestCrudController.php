@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Guest;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -28,6 +29,7 @@ class GuestCrudController extends AbstractCrudController
 
             AssociationField::new('event')->setColumns(6),
             NumberField::new('pluses')->setColumns(6),
+            BooleanField::new('vip')->setColumns(3),
 
             FormField::addPanel('Check-In Information')->setIcon('fa fa-check'),
             DateTimeField::new('checkInTime')->setColumns(6)->hideOnIndex(),

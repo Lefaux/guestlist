@@ -25,7 +25,7 @@ class Event
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Guest::class, mappedBy="event")
+     * @ORM\OneToMany(targetEntity=Guest::class, mappedBy="event", cascade={"persist"})
      * @ORM\OrderBy({"checkInTime" = "ASC", "lastName" = "ASC", "firstName" = "ASC"})
      */
     private $guests;
