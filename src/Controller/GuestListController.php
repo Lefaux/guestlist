@@ -25,7 +25,7 @@ class GuestListController extends AbstractController
      */
     public function index(): Response
     {
-        $events = $this->eventRepository->findAll();
+        $events = $this->eventRepository->findBy([], ['eventStart' => 'DESC']);
         return $this->render('guest_list/index.html.twig', [
             'events' => $events,
         ]);

@@ -30,6 +30,11 @@ class Event
      */
     private $guests;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $eventStart;
+
     public function __construct()
     {
         $this->guests = new ArrayCollection();
@@ -95,5 +100,17 @@ class Event
     public function __toString()
     {
         return (string)$this->name;
+    }
+
+    public function getEventStart(): ?\DateTimeInterface
+    {
+        return $this->eventStart;
+    }
+
+    public function setEventStart(\DateTimeInterface $eventStart): self
+    {
+        $this->eventStart = $eventStart;
+
+        return $this;
     }
 }
