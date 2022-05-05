@@ -14,9 +14,11 @@
             <th></th>
         </tr>
     {% for event in events %}
-        {%set tableClass = 'text-white' %}
+        {% set tableClass = 'text-white' %}
+        {% set buttonClass = '' %}
         {% if  event.eventStart|date("Ymd") < 'now'|date("Ymd") %}
             {%set tableClass = 'text-muted' %}
+            {% set buttonClass = '-outline' %}
         {% elseif event.eventStart|date("Ymd") == 'now'|date("Ymd") %}
             {%set tableClass = 'text-black bg-warning' %}
         {% endif %}
@@ -24,8 +26,8 @@
             <td>{{ event.eventStart|date("d.m.Y") }}</td>
             <td>{{ event.name }}</td>
             <td>{{ event.totalGuests }}</td>
-            <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn-success">SELECT</a></td>
-            <td><a href="{{ path('app_host', { event:event.id }) }}" class="btn btn-info">ORGANIZER VIEW</a></td>
+            <td><a href="{{ path('app_guest_list_event', { event:event.id }) }}" class="btn btn{{  buttonClass}}-success">SELECT</a></td>
+            <td><a href="{{ path('app_host', { event:event.id }) }}" class="btn btn{{  buttonClass}}-info">ORGANIZER VIEW</a></td>
         </tr>
     {% endfor %}
     </table>
