@@ -29,8 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 rows.appendChild(guestRow);
             }
             guestListTableBody.appendChild(rows);
-            showHideCheckedInRow();
-
             document.dispatchEvent(new CustomEvent('guestlist:list-loaded'));
         })
     });
@@ -43,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentGuestRow.replaceWith(computedGuestRow);
         loadStats(event.detail.data.event);
         sortRows();
+        showHideCheckedInRow();
     });
 
     searchInput.addEventListener('input', debounce(function(event) {
@@ -65,6 +64,11 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('guestlist:list-loaded', function () {
     const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
     searchInput.disabled = false;
+
+    const hiddenToggle = document.querySelector('#showCheckedInGuests');
+    hiddenToggle.addEventListener('click', function (){
+        showHideCheckedInRow();
+    })
 
     const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
     guestListTable.addEventListener('click', function (event) {
@@ -313,7 +317,6 @@ function sortRows() {
     intermediateTableContents.appendChild(intermediateTableBody);
     intermediateTableBody.append(...rows);
     guestListTableBody.replaceWith(intermediateTableContents);
-    showHideCheckedInRow();
 }
 
 function showHideCheckedInRow() {
