@@ -62,7 +62,7 @@ class JsonController extends AbstractController
             $guest->setCheckInTime($checkInTime);
             $guest->setCheckedInPluses($payload['checkedInPluses'] ?: 0);
             $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN);
-            if ($guest->getPluses() < $guest->getCheckedInPluses()) {
+            if ($guest->getPluses() > $guest->getCheckedInPluses()) {
                 $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN_WITH_NOSHOWS);
             }
             $this->entityManager->persist($guest);
