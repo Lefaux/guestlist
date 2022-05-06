@@ -55,6 +55,11 @@ class JsonController extends AbstractController
             try {
                 $payload = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
             } catch (\JsonException $e) {
+                return $this->json([
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'stack' => $e->getTrace(),
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         $checkInTime = new DateTime('now');
