@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\CheckinStatusEnum;
 use App\Repository\GuestRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -51,6 +52,11 @@ class Guest implements \JsonSerializable
      * @ORM\Column(type="boolean")
      */
     private $vip;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $checkInStatus;
 
     public function getId(): ?int
     {
@@ -166,5 +172,20 @@ class Guest implements \JsonSerializable
             $renderedString .= ' +' . (int)$this->getPluses();
         }
         return $renderedString;
+    }
+
+    public function getCheckInStatus(): ?string
+    {
+        return $this->checkInStatus;
+    }
+
+    public function setCheckInStatus(string $checkInStatus): self
+    {
+        if (CheckinStatusEnum::isOption($checkInStatus)) {
+            $this->checkInStatus = $checkInStatus;
+        } else {
+            throw new \RuntimeException('Enum not allowed');
+        }
+        return $this;
     }
 }
