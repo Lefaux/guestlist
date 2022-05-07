@@ -229,6 +229,12 @@ function handleAjaxError(data) {
 
 function injectData(dataValues, domNode) {
     // Fill data attributes with dotted values
+    // Change Color based on VIP status
+    if (dataValues.vip) {
+        domNode.classList.remove('text-white');
+        domNode.classList.add('text-warning');
+        domNode.classList.add('bg-vip');
+    }
     const rootNode = domNode.getRootNode();
     if (rootNode !== document) {
         for (const attribute of rootNode.getAttributeNames()) {
