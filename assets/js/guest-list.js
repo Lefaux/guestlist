@@ -63,13 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 150));
 });
 
-function handleLoadedGuestList(e) {
-    // Change color based on VIP status
-    e.target.querySelectorAll('[data-vip="true"]').forEach(function(vipRow) {
-        vipRow.classList.replace('text-white', 'text-warning')
-        vipRow.classList.add('bg-vip');
-    });
-
+function handleLoadedGuestList() {
     const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
     searchInput.disabled = false;
 
@@ -283,6 +277,12 @@ function composeGuestRow(data) {
         : SELECTOR_GUEST_CHECKED_IN_TEMPLATE;
     const rowFromTemplate = getFromTemplate(template);
     injectData(data, rowFromTemplate);
+
+    // Change color based on VIP status
+    if (data.vip) {
+        rowFromTemplate.classList.replace('text-white', 'text-warning')
+        rowFromTemplate.classList.add('bg-vip');
+    }
 
     if (data.pluses) {
         let plusesColText = '+';
