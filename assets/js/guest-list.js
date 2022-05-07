@@ -5,11 +5,9 @@ const SELECTOR_GUEST_LIST_TABLE = '#guest-list-table';
 const SELECTOR_EVENT_STATISTICS_CONTAINER = '#event-statistics';
 const SELECTOR_CHECKIN_BUTTON = '[data-action="check-in"]';
 const SELECTOR_CHECKOUT_BUTTON = '[data-action="check-out"]';
-const SELECTOR_MARK_NOSHOW_BUTTON = '[data-action="mark-no-show"]';
 const SELECTOR_CHECKIN_MODAL_TEMPLATE = '#check-in-modal';
 const SELECTOR_CHECKIN_MODAL_PLUS_BUTTON_TEMPLATE = '#modal-plus-button';
 const SELECTOR_CHECKOUT_MODAL_TEMPLATE = '#check-out-modal';
-const SELECTOR_MARK_NOSHOW_MODAL_TEMPLATE = '#mark-no-show-modal';
 const SELECTOR_BUTTON_IN_PROGRESS = '#button-in-progress';
 const SELECTOR_GUEST_NOT_CHECKED_IN_TEMPLATE = '#guest-list-row-not-checked-in';
 const SELECTOR_GUEST_CHECKED_IN_TEMPLATE = '#guest-list-row-checked-in';
@@ -155,28 +153,13 @@ function handleLoadedGuestList(e) {
                     });
                 });
             });
-        }
 
-        if (event.target.matches(SELECTOR_CHECKOUT_BUTTON)) {
-            const row = event.target.closest('tr');
-            const guestId = row.dataset.guestId;
-            const checkoutModal = getFromTemplate(SELECTOR_CHECKOUT_MODAL_TEMPLATE)
-
-            injectData(row.dataset, checkoutModal);
-            document.body.appendChild(checkoutModal);
-
-            const modal = new Modal(checkoutModal, {
-                backdrop: 'static'
-            });
-            disposeModalOnClose(checkoutModal);
-            modal.show();
-
-            checkoutModal.querySelector('[data-action="perform-check-out"]').addEventListener('click', async function (event) {
+            checkinModal.querySelector('[data-action="perform-mark-no-show"]').addEventListener('click', async function (event) {
                 event.target.disabled = true;
                 event.target.innerHTML = '';
                 event.target.appendChild(getFromTemplate(SELECTOR_BUTTON_IN_PROGRESS));
 
-                await fetch('/json/checkout/' + guestId, {
+                await fetch('/json/cancel/' + guestId, {
                     method: 'POST',
                     credentials: 'same-origin'
                 }).then(async function (response) {
@@ -199,26 +182,26 @@ function handleLoadedGuestList(e) {
             });
         }
 
-        if (event.target.matches(SELECTOR_MARK_NOSHOW_BUTTON)) {
+        if (event.target.matches(SELECTOR_CHECKOUT_BUTTON)) {
             const row = event.target.closest('tr');
             const guestId = row.dataset.guestId;
-            const nowShowModal = getFromTemplate(SELECTOR_MARK_NOSHOW_MODAL_TEMPLATE)
+            const checkoutModal = getFromTemplate(SELECTOR_CHECKOUT_MODAL_TEMPLATE)
 
-            injectData(row.dataset, nowShowModal);
-            document.body.appendChild(nowShowModal);
+            injectData(row.dataset, checkoutModal);
+            document.body.appendChild(checkoutModal);
 
-            const modal = new Modal(nowShowModal, {
+            const modal = new Modal(checkoutModal, {
                 backdrop: 'static'
             });
-            disposeModalOnClose(nowShowModal);
+            disposeModalOnClose(checkoutModal);
             modal.show();
 
-            nowShowModal.querySelector('[data-action="perform-mark-no-show"]').addEventListener('click', async function (event) {
+            checkoutModal.querySelector('[data-action="perform-check-out"]').addEventListener('click', async function (event) {
                 event.target.disabled = true;
                 event.target.innerHTML = '';
                 event.target.appendChild(getFromTemplate(SELECTOR_BUTTON_IN_PROGRESS));
 
-                await fetch('/json/cancel/' + guestId, {
+                await fetch('/json/checkout/' + guestId, {
                     method: 'POST',
                     credentials: 'same-origin'
                 }).then(async function (response) {

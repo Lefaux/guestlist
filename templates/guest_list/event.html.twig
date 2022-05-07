@@ -59,10 +59,9 @@
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
             <td class="align-middle" data-col="checkInTime"></td>
-            <td class="actions">
-                <div data-if=".status != CANCELLED">
+            <td>
+                <div class="d-grid" data-col="actions" data-if=".status != CANCELLED">
                     <button type="button" class="btn btn-success" data-action="check-in">Check In</button>
-                    <button type="button" class="btn btn-danger" data-action="mark-no-show">No show</button>
                 </div>
             </td>
         </tr>
@@ -74,8 +73,10 @@
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
             <td class="align-middle" data-value="checkInTime"></td>
-            <td class="actions">
-                <button type="button" class="btn btn-warning" data-action="check-out">Check Out</button>
+            <td>
+                <div class="d-grid" data-col="actions">
+                    <button type="button" class="btn btn-warning" data-action="check-out">Check Out</button>
+                </div>
             </td>
         </tr>
     </template>
@@ -104,6 +105,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-action="perform-mark-no-show">Cancel participation</button>
                         <button type="submit" class="btn btn-success" data-action="perform-check-in" form="check-in-form">Check in</button>
                     </div>
                 </div>
@@ -122,27 +124,6 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-success" data-action="perform-check-out">Check out</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <template id="mark-no-show-modal">
-        <div class="modal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Cancel participation of <span data-value="firstName"></span> <span data-value="lastName"></span></h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Cancel participation of <span data-value="firstName"></span> <span data-value="lastName"></span>? This will mark the guest as a "no show".</p>
-                        <p>This action cannot get reverted. Are you sure?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" data-action="perform-mark-no-show">Cancel participation</button>
                     </div>
                 </div>
             </div>
