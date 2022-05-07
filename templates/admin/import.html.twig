@@ -7,19 +7,20 @@
     <p>Hier könnt ihr Gästelisten direkt als CSV Datei importieren.</p>
     <p>Das Format ist hier wichtig, also beachtet bitte folgende Punkte:</p>
     <ol>
-        <li>Spalte 1: Vorname</li>
-        <li>Spalte 2: Nachname</li>
-        <li>Spalte 3: Anzahl weiterer Gäste als Zahl. Kein + davor, bitte.</li>
-        <li>Die erste Zeile wird nicht importiert. Nutzt diese, um in eurer Excel Liste oder eurem Google Spreadsheet die 3 Spalten zu benennen.</li>
+        <li>Spalte 1: VIP (muss genau "VIP" sein)</li>
+        <li>Spalte 2: Vorname</li>
+        <li>Spalte 3: Nachname</li>
+        <li>Spalte 4: Anzahl weiterer Gäste als Zahl. Kein + davor, bitte.</li>
+        <li>Die erste Zeile wird nicht importiert. Nutzt diese, um in eurer Excel Liste oder eurem Google Spreadsheet die 4 Spalten zu benennen. Alternativ könnt ihr einen Event anlegen und dort ein leeres File herunterladen.</li>
         <li>Excel exportiert je nach Version nicht komma-separiert, sondern semikolon-separiert. Falls ihr euch nicht sicher seid, schickt die Datei <a href="mailto:mathias.schreiber@typo3.com">Mathias</a>, der weiß, was zu tun ist ;-)</li>
         <li>Die Werte pro Zeile <i>können</i> mit <kbd>"</kbd> (doppelten Anführungsstrichen) umfasst werden.</li>
     </ol>
     <h3>Beispiel für eine CSV Datei:</h3>
     <pre>
-        Vorname,Nachname,Gäste
-        Husel,Pusel,0
-        Waldemar,Bla,2
-        "Desireé","de la Muerte",9
+        VIP,Vorname,Nachname,Gäste
+        ,Husel,Pusel,0
+        VIP,Waldemar,Bla,2
+        ,"Desireé","de la Muerte",9
     </pre>
     <div class="alert alert-danger">Durch das Hochladen einer neuen Liste werden <b>alle</b> (!) alten Gäste bei diesem Event gelöscht!<br> Die alten Gäste können wir auch nicht zurück holen, egal, ob ihr Mist gebaut habt, eure kleine Schwester am Rechner war... LALALA, wir können euch nicht hören</div>
     <hr>

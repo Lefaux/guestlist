@@ -80,10 +80,14 @@ class ImportController extends AbstractController
         foreach ($guestList as $index => $item) {
             if ($index > 0) {
                 $guest = new Guest();
-                $guest->setFirstName($item[0]);
+                $guest->setVip(false);
+                if (trim($item[0]) === 'VIP') {
+                    $guest->setVip(true);
+                }
+                $guest->setFirstName($item[1]);
                 $guest->setEvent($event);
-                $guest->setLastName($item[1]);
-                $guest->setPluses((int)$item[2]);
+                $guest->setLastName($item[2]);
+                $guest->setPluses((int)$item[3]);
                 $event->addGuest($guest);
                 $this->entityManager->persist($guest);
                 $this->entityManager->flush();
