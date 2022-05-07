@@ -5,9 +5,11 @@ const SELECTOR_GUEST_LIST_TABLE = '#guest-list-table';
 const SELECTOR_EVENT_STATISTICS_CONTAINER = '#event-statistics';
 const SELECTOR_CHECKIN_BUTTON = '[data-action="check-in"]';
 const SELECTOR_CHECKOUT_BUTTON = '[data-action="check-out"]';
+const SELECTOR_MARK_NOSHOW_BUTTON = '[data-action="mark-no-show"]';
 const SELECTOR_CHECKIN_MODAL_TEMPLATE = '#check-in-modal';
 const SELECTOR_CHECKIN_MODAL_PLUS_BUTTON_TEMPLATE = '#modal-plus-button';
 const SELECTOR_CHECKOUT_MODAL_TEMPLATE = '#check-out-modal';
+const SELECTOR_MARK_NOSHOW_MODAL_TEMPLATE = '#mark-no-show-modal';
 const SELECTOR_BUTTON_IN_PROGRESS = '#button-in-progress';
 const SELECTOR_GUEST_NOT_CHECKED_IN_TEMPLATE = '#guest-list-row-not-checked-in';
 const SELECTOR_GUEST_CHECKED_IN_TEMPLATE = '#guest-list-row-checked-in';
@@ -196,6 +198,48 @@ function handleLoadedGuestList(e) {
                 });
             });
         }
+
+        if (event.target.matches(SELECTOR_MARK_NOSHOW_BUTTON)) {
+            const row = event.target.closest('tr');
+            const guestId = row.dataset.guestId;
+            const nowShowModal = getFromTemplate(SELECTOR_MARK_NOSHOW_MODAL_TEMPLATE)
+
+            injectData(row.dataset, nowShowModal);
+            document.body.appendChild(nowShowModal);
+
+            const modal = new Modal(nowShowModal, {
+                backdrop: 'static'
+            });
+            disposeModalOnClose(nowShowModal);
+            modal.show();
+
+            nowShowModal.querySelector('[data-action="perform-mark-no-show"]').addEventListener('click', async function (event) {
+                event.target.disabled = true;
+                event.target.innerHTML = '';
+                event.target.appendChild(getFromTemplate(SELECTOR_BUTTON_IN_PROGRESS));
+
+                await fetch('/json/cancel/' + guestId, {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                }).then(async function (response) {
+                    response.json().then(function (data) {
+                        modal.hide();
+
+                        if (!response.ok) {
+                            handleAjaxError(data);
+                            return;
+                        }
+
+                        document.querySelector(SELECTOR_GUEST_LIST_TABLE).dispatchEvent(new CustomEvent('guestlist:record-updated', {
+                            detail: {
+                                guestId: guestId,
+                                data: data
+                            }
+                        }));
+                    });
+                });
+            });
+        }
     });
 }
 
@@ -230,7 +274,9 @@ function handleAjaxError(data) {
     });
     modal.show();
 
-    errorModal.querySelector('pre').textContent = data.stack.map(item => item.file + ':' + item.line).join("\n");
+    if (typeof data.stack !== 'undefined') {
+        errorModal.querySelector('pre').textContent = data.stack.map(item => item.file + ':' + item.line).join("\n");
+    }
 }
 
 function injectData(dataValues, domNode) {
@@ -262,6 +308,20 @@ function injectData(dataValues, domNode) {
             }
         });
     }
+
+    // Handle conditions
+    Array.from(domNode.querySelectorAll('[data-if]')).forEach(function (conditionalNode) {
+        const condition = conditionalNode.dataset.if;
+        if (condition.includes('!=')) {
+            const [field, matchingValue] = condition.split('!=').map(operand => operand.trim());
+            const property = field.substring(1);
+            const actualValue = dataValues[property] || null;
+
+            if (actualValue === matchingValue) {
+                conditionalNode.remove();
+            }
+        }
+    });
 }
 
 function disposeModalOnClose(modal) {
@@ -286,6 +346,10 @@ function composeGuestRow(data) {
     if (data.vip) {
         rowFromTemplate.classList.replace('text-white', 'text-warning')
         rowFromTemplate.classList.add('bg-vip');
+    }
+
+    if (data.status === 'CANCELLED') {
+        rowFromTemplate.classList.add('bg-cancelled');
     }
 
     if (data.pluses) {

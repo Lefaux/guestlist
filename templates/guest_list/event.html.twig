@@ -54,29 +54,28 @@
     <hr>
 
     <template id="guest-list-row-not-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="text-white">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" data-status=".status" class="text-white">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
             <td class="align-middle" data-col="checkInTime"></td>
-            <td>
-                <div class="d-grid" data-col="actions">
+            <td class="actions">
+                <div data-if=".status != CANCELLED">
                     <button type="button" class="btn btn-success" data-action="check-in">Check In</button>
+                    <button type="button" class="btn btn-danger" data-action="mark-no-show">No show</button>
                 </div>
             </td>
         </tr>
     </template>
 
     <template id="guest-list-row-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="row-checked-in bg-danger text-white">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" data-status=".status" class="row-checked-in bg-danger text-white">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
             <td class="align-middle" data-value="checkInTime"></td>
-            <td>
-                <div class="d-grid" data-col="actions">
-                    <button type="button" class="btn btn-warning" data-action="check-out">Check Out</button>
-                </div>
+            <td class="actions">
+                <button type="button" class="btn btn-warning" data-action="check-out">Check Out</button>
             </td>
         </tr>
     </template>
@@ -129,6 +128,27 @@
         </div>
     </template>
 
+    <template id="mark-no-show-modal">
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Cancel participation of <span data-value="firstName"></span> <span data-value="lastName"></span></h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Cancel participation of <span data-value="firstName"></span> <span data-value="lastName"></span>? This will mark the guest as a "no show".</p>
+                        <p>This action cannot get reverted. Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-action="perform-mark-no-show">Cancel participation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <template id="button-in-progress">
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     </template>
@@ -137,7 +157,7 @@
         <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Uncaught <span data-value="exception"></span></h3>
+                    <h3 class="modal-title">Uncaught error <span data-value="exception"></span></h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

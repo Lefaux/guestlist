@@ -117,9 +117,12 @@ class JsonController extends AbstractController
      */
     public function cancelGuest(Guest $guest): JsonResponse
     {
-        $checkInTime = new DateTime('now');
+        if ($guest->getCheckInStatus() !== CheckinStatusEnum::OPEN) {
+            return $this->json([
+                'message' => 'You can only mark open positions as "no show".',
+            ], Response::HTTP_BAD_REQUEST);
+        }
         try {
-            $guest->setCheckInTime($checkInTime);
             $guest->setCheckedInPluses(0);
             $guest->setCheckInStatus(CheckinStatusEnum::CANCELLED);
             $this->entityManager->persist($guest);

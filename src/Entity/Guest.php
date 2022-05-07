@@ -135,21 +135,6 @@ class Guest implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'firstName' => $this->getFirstName(),
-            'lastName' => $this->getLastName(),
-            'pluses' => $this->getPluses(),
-            'event' => $this->getEvent() !== null ? $this->getEvent()->getId() : null,
-            'checkInTime' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->format('d.m.Y H:i') : null,
-            'checkInTimestamp' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->getTimestamp() : 0,
-            'checkedInPluses' => $this->getCheckedInPluses(),
-            'vip' => $this->getVip()
-        ];
-    }
-
     public function getVip(): ?bool
     {
         return $this->vip;
@@ -187,5 +172,22 @@ class Guest implements \JsonSerializable
             throw new \RuntimeException('Enum not allowed');
         }
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'pluses' => $this->getPluses(),
+            'event' => $this->getEvent() !== null ? $this->getEvent()->getId() : null,
+            'checkInTime' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->format('d.m.Y H:i') : null,
+            'checkInTimestamp' => $this->getCheckInTime() !== null ? $this->getCheckInTime()->getTimestamp() : 0,
+            'checkedInPluses' => $this->getCheckedInPluses(),
+            'vip' => $this->getVip(),
+            'status' => $this->getCheckInStatus(),
+            'statusLabel' => CheckinStatusEnum::getName($this->getCheckInStatus()),
+        ];
     }
 }
