@@ -33,7 +33,7 @@ class FixDatabaseDataCommand extends Command
         $guests = $this->guestRepository->findAll();
         $io->writeln('Found ' . count($guests) . ' guests to work on');
         foreach ($guests as $guest) {
-            if ($guest->getCheckInStatus() === 'UNCLEAR') {
+            if ($guest->getCheckInStatus() === 'OPEN') {
                 if (!$guest->getCheckInTime()) {
                     $guest->setCheckInStatus(CheckinStatusEnum::OPEN);
                     $io->write('O');
