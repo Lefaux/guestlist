@@ -1,22 +1,40 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block content_title %}Guestlist Admin Dashboard{% endblock %}
+{% block page_title %}Guestlist Admin Dashboard{% endblock %}
 
 {% block main %}
-    <table class="datagrid">
+    <table class="table">
         <thead>
         <tr>
-            <td>Event</td>
-            <td>Guests</td>
-            <td>Used Slots</td>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Total Guests</th>
+            <th>Checked in Guests</th>
+            <th>No Shows</th>
+            <th>%</th>
         </tr>
         </thead>
         <tbody>
         {% for data in events %}
             <tr>
-                <td>{{ data.name }}</td>
-                <td>{{ data.numberOfGuests }}</td>
-                <td>@todo implement</td>
+                <td>
+                    {% if data.eventStart|date("Ymd") < 'now'|date("Ymd") %}
+                        <i class="fa fa-door-closed text-danger"></i>
+                    {% else %}
+                        <i class="fa fa-door-open text-success"></i>
+                    {% endif %}
+                    {{ data.name }}</td>
+                <td>{{ data.eventStart|date('d.m.Y') }}</td>
+                <td>{{ data.stats.counters.totalExpectedGuests }}</td>
+                <td>{{ data.stats.counters.totalCheckedIn }}</td>
+                <td>{{ data.stats.counters.totalNoShows }}</td>
+                <td>
+                    <div class="progress mb-1">
+                        <div data-progress="percentage" class="progress-bar bg-success" role="progressbar" style="width: {{ data.stats.percentages.percentage }}%" aria-valuenow="{{ data.stats.percentages.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ data.stats.percentages.percentage }}%</div>
+                        <div data-progress="no-show-percentage" class="progress-bar bg-danger" role="progressbar" style="width: {{ data.stats.percentages.noShowPercentage }}%" aria-valuenow="{{ data.stats.percentages.noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ data.stats.percentages.noShowPercentage }}%</div>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

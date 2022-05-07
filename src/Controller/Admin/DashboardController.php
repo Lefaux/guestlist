@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Event;
 use App\Entity\Guest;
 use App\Repository\EventRepository;
+use App\Service\EventService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -15,10 +16,12 @@ class DashboardController extends AbstractDashboardController
 {
 
     private EventRepository $eventRepository;
+    private EventService $eventService;
 
-    public function __construct(EventRepository $eventRepository)
+    public function __construct(EventRepository $eventRepository, EventService $eventService)
     {
         $this->eventRepository = $eventRepository;
+        $this->eventService = $eventService;
     }
 
     /**
@@ -27,11 +30,12 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $events = [];
-        $allEvents = $this->eventRepository->findAll();
+        $allEvents = $this->eventRepository->findBy([], ['eventStart' => 'DESC']);
         foreach ($allEvents as $event) {
             $events[] = [
                 'name' => $event->getName(),
-                'numberOfGuests' => count($event->getGuests())
+                'eventStart' => $event->getEventStart(),
+                'stats' => $this->eventService->getStatsForEvent($event)
             ];
         }
         return $this->render('dashboard.html.twig', ['events' => $events]);
