@@ -319,7 +319,7 @@ function getFromTemplate(id) {
 }
 
 function composeGuestRow(data) {
-    const template = data.checkInTime === null
+    const template = data.status === 'OPEN' || data.status === 'UNCLEAR'
         ? SELECTOR_GUEST_NOT_CHECKED_IN_TEMPLATE
         : SELECTOR_GUEST_CHECKED_IN_TEMPLATE;
     const rowFromTemplate = getFromTemplate(template);
@@ -332,7 +332,7 @@ function composeGuestRow(data) {
     }
 
     if (data.status === 'CANCELLED') {
-        rowFromTemplate.classList.add('bg-cancelled');
+        rowFromTemplate.classList.replace('bg-danger', 'guest-cancelled');
     }
 
     if (data.pluses) {

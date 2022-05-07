@@ -41,8 +41,13 @@ $input-group-addon-border-color: $gray-900;
 
 @import "./modules/tablesort";
 
-.bg-cancelled {
-  opacity: 0.5;
+.guest-cancelled {
+  background-color: rgba(var(--bs-danger-rgb), .5);
+
+  td:not(.actions) {
+    text-decoration: line-through;
+    text-decoration-thickness: 15%;
+  }
 }
 
 .bg-vip {
