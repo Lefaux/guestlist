@@ -319,7 +319,7 @@ function getFromTemplate(id) {
 }
 
 function composeGuestRow(data) {
-    const template = data.status === 'OPEN' || data.status === 'UNCLEAR'
+    const template = data.status === 'OPEN'
         ? SELECTOR_GUEST_NOT_CHECKED_IN_TEMPLATE
         : SELECTOR_GUEST_CHECKED_IN_TEMPLATE;
     const rowFromTemplate = getFromTemplate(template);
