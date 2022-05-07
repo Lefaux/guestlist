@@ -1,0 +1,35 @@
+th[role=columnheader]:not([data-sort-method="none"]):not(.no-sort) {
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    float: right;
+    margin-top: calc(1em - 6px);
+    border-color: $white transparent;
+    visibility: hidden;
+    opacity: 0;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  &:hover:after {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+th[aria-sort]:not([data-sort-method="none"]):not(.no-sort):after {
+  visibility: visible;
+  opacity: 0.4;
+  border-style: solid;
+}
+
+th[aria-sort=ascending]:not([data-sort-method="none"]):not(.no-sort):after {
+  border-width: 0 4px 4px;
+}
+
+th[aria-sort=descending]:not([data-sort-method="none"]):not(.no-sort):after {
+  border-width: 4px 4px 0;
+}

@@ -1,3 +1,4 @@
+import Tablesort from 'tablesort/dist/tablesort.min';
 import Modal from 'bootstrap/js/dist/modal';
 
 const SELECTOR_GUEST_LIST_TABLE = '#guest-list-table';
@@ -42,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         currentGuestRow.replaceWith(computedGuestRow);
         loadStats(event.detail.data.event);
-        sortRows();
         showHideCheckedInRow();
     });
 
@@ -63,7 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 150));
 });
 
-function handleLoadedGuestList() {
+function handleLoadedGuestList(e) {
+    new Tablesort(e.target, {
+        descending: true
+    });
+
     const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
     searchInput.disabled = false;
 
@@ -295,36 +299,6 @@ function composeGuestRow(data) {
     }
 
     return rowFromTemplate;
-}
-
-function sortRows() {
-    const rowSorter = function (row1, row2) {
-        const checkInTimestamp1 = row1.dataset.checkIn;
-        const checkInTimestamp2 = row2.dataset.checkIn;
-        const firstName1 = row1.dataset.firstName;
-        const firstName2 = row2.dataset.firstName;
-        const lastName1 = row1.dataset.lastName;
-        const lastName2 = row2.dataset.lastName;
-
-        let result = checkInTimestamp1 - checkInTimestamp2;
-        if (result === 0) {
-            result = firstName1.localeCompare(firstName2);
-            if (result === 0) {
-                result = lastName1.localeCompare(lastName2);
-            }
-        }
-
-        return result;
-    };
-    const guestListTableBody = document.querySelector(SELECTOR_GUEST_LIST_TABLE + ' tbody');
-    const rows = Array.from(guestListTableBody.querySelectorAll('tr[data-first-name][data-last-name]'));
-    rows.sort(rowSorter);
-
-    const intermediateTableContents = document.createDocumentFragment();
-    const intermediateTableBody = document.createElement('tbody');
-    intermediateTableContents.appendChild(intermediateTableBody);
-    intermediateTableBody.append(...rows);
-    guestListTableBody.replaceWith(intermediateTableContents);
 }
 
 function showHideCheckedInRow() {
