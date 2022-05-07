@@ -40,11 +40,11 @@
     <table class="table my-4" id="guest-list-table" data-event-id="{{ event.id }}">
         <thead>
             <tr class="text-white text-uppercase bg-secondary">
-                <th id="sorter-firstname">First Name</th>
-                <th id="sorter-lastname">Last Name</th>
-                <th>Pluses</th>
-                <th>Checked In</th>
-                <th></th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th data-sort-method="none">Pluses</th>
+                <th data-sort-method="none">Checked In</th>
+                <th data-sort-method="none"></th>
             </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@
     <hr>
 
     <template id="guest-list-row-not-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" data-check-in=".checkInTimestamp" class="text-white">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="text-white">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
@@ -68,7 +68,7 @@
     </template>
 
     <template id="guest-list-row-checked-in">
-        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" data-check-in=".checkInTimestamp" class="row-checked-in bg-danger text-white">
+        <tr data-guest-id=".id" data-first-name=".firstName" data-last-name=".lastName" data-pluses=".pluses" class="row-checked-in bg-danger text-white">
             <td class="align-middle" data-col="firstName" data-value="firstName"></td>
             <td class="align-middle" data-col="lastName" data-value="lastName"></td>
             <td class="align-middle" data-col="pluses"></td>
