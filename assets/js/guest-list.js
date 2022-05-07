@@ -15,52 +15,54 @@ const SELECTOR_SEARCH_INPUT = '#searchbox';
 
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
-    const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
-    const guestListTableBody = document.querySelector(SELECTOR_GUEST_LIST_TABLE + ' tbody');
-    const eventId = parseInt(guestListTable.dataset.eventId, 10);
+    if (searchInput) {
+        const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
+        const guestListTableBody = document.querySelector(SELECTOR_GUEST_LIST_TABLE + ' tbody');
+        const eventId = parseInt(guestListTable.dataset.eventId, 10);
 
-    guestListTable.addEventListener('guestlist:list-loaded', handleLoadedGuestList);
+        guestListTable.addEventListener('guestlist:list-loaded', handleLoadedGuestList);
 
-    fetch('/json/' + eventId + '/guests', {
-        credentials: 'same-origin'
-    }).then(async function (response) {
-        response.json().then(function (data) {
-            // For performance reasons, all generated rows are stored in a document fragment before rendering in client
-            const rows = document.createDocumentFragment();
-            for (const guest of data) {
-                const guestRow = composeGuestRow(guest);
-                rows.appendChild(guestRow);
-            }
-            guestListTableBody.appendChild(rows);
-            guestListTable.dispatchEvent(new CustomEvent('guestlist:list-loaded'));
-        })
-    });
-
-    guestListTable.addEventListener('guestlist:record-updated', function (event) {
-        // Redraw row in table
-        const computedGuestRow = composeGuestRow(event.detail.data);
-        const currentGuestRow = event.target.querySelector('[data-guest-id="' + event.detail.guestId + '"]');
-
-        currentGuestRow.replaceWith(computedGuestRow);
-        loadStats(event.detail.data.event);
-        showHideCheckedInRow();
-    });
-
-    searchInput.addEventListener('input', debounce(function(event) {
-        const normalizedSearch = event.target.value.toLowerCase();
-
-        const rows = Array.from(guestListTable.querySelectorAll('tr[data-first-name][data-last-name]'));
-        rows.forEach(function (row) {
-            const normalizedFirstName = row.dataset.firstName.toLowerCase();
-            const normalizedLastName = row.dataset.lastName.toLowerCase();
-
-            if (normalizedFirstName.startsWith(normalizedSearch) || normalizedLastName.startsWith(normalizedSearch)) {
-                row.hidden = false;
-            } else {
-                row.hidden = true;
-            }
+        fetch('/json/' + eventId + '/guests', {
+            credentials: 'same-origin'
+        }).then(async function (response) {
+            response.json().then(function (data) {
+                // For performance reasons, all generated rows are stored in a document fragment before rendering in client
+                const rows = document.createDocumentFragment();
+                for (const guest of data) {
+                    const guestRow = composeGuestRow(guest);
+                    rows.appendChild(guestRow);
+                }
+                guestListTableBody.appendChild(rows);
+                guestListTable.dispatchEvent(new CustomEvent('guestlist:list-loaded'));
+            })
         });
-    }, 150));
+
+        guestListTable.addEventListener('guestlist:record-updated', function (event) {
+            // Redraw row in table
+            const computedGuestRow = composeGuestRow(event.detail.data);
+            const currentGuestRow = event.target.querySelector('[data-guest-id="' + event.detail.guestId + '"]');
+
+            currentGuestRow.replaceWith(computedGuestRow);
+            loadStats(event.detail.data.event);
+            showHideCheckedInRow();
+        });
+
+        searchInput.addEventListener('input', debounce(function (event) {
+            const normalizedSearch = event.target.value.toLowerCase();
+
+            const rows = Array.from(guestListTable.querySelectorAll('tr[data-first-name][data-last-name]'));
+            rows.forEach(function (row) {
+                const normalizedFirstName = row.dataset.firstName.toLowerCase();
+                const normalizedLastName = row.dataset.lastName.toLowerCase();
+
+                if (normalizedFirstName.startsWith(normalizedSearch) || normalizedLastName.startsWith(normalizedSearch)) {
+                    row.hidden = false;
+                } else {
+                    row.hidden = true;
+                }
+            });
+        }, 150));
+    }
 });
 
 function handleLoadedGuestList(e) {
