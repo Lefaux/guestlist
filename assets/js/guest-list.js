@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const guestListTableBody = document.querySelector(SELECTOR_GUEST_LIST_TABLE + ' tbody');
     const eventId = parseInt(guestListTable.dataset.eventId, 10);
 
+    guestListTable.addEventListener('guestlist:list-loaded', handleLoadedGuestList);
+
     fetch('/json/' + eventId + '/guests', {
         credentials: 'same-origin'
     }).then(async function (response) {
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 rows.appendChild(guestRow);
             }
             guestListTableBody.appendChild(rows);
-            document.dispatchEvent(new CustomEvent('guestlist:list-loaded'));
+            guestListTable.dispatchEvent(new CustomEvent('guestlist:list-loaded'));
         })
     });
 
@@ -61,7 +63,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 150));
 });
 
-document.addEventListener('guestlist:list-loaded', function () {
+function handleLoadedGuestList(e) {
+    // Change color based on VIP status
+    e.target.querySelectorAll('[data-vip="true"]').forEach(function(vipRow) {
+        vipRow.classList.replace('text-white', 'text-warning')
+        vipRow.classList.add('bg-vip');
+    });
+
     const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
     searchInput.disabled = false;
 
@@ -191,7 +199,7 @@ document.addEventListener('guestlist:list-loaded', function () {
             });
         }
     });
-});
+}
 
 function loadStats(event) {
     fetch('/json/stats/' + event, {
@@ -229,12 +237,6 @@ function handleAjaxError(data) {
 
 function injectData(dataValues, domNode) {
     // Fill data attributes with dotted values
-    // Change Color based on VIP status
-    if (dataValues.vip) {
-        domNode.classList.remove('text-white');
-        domNode.classList.add('text-warning');
-        domNode.classList.add('bg-vip');
-    }
     const rootNode = domNode.getRootNode();
     if (rootNode !== document) {
         for (const attribute of rootNode.getAttributeNames()) {
