@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Event;
+use App\Enum\CheckinStatusEnum;
 
 class EventService
 {
@@ -15,11 +16,17 @@ class EventService
         $noShowCounter = 0;
         foreach ($event->getGuests() as $guest) {
             $guestCounter += ($guest->getPluses() + 1);
-            if ($guest->getCheckInTime()) {
-                $checkedInGuestCounter += ($guest->getCheckedInPluses() +1);
-                if ($guest->getCheckedInPluses() < $guest->getPluses()) {
+            switch ($guest->getCheckInStatus()) {
+                case CheckinStatusEnum::CHECKED_IN:
+                    $checkedInGuestCounter += ($guest->getCheckedInPluses() +1);
+                    break;
+                case CheckinStatusEnum::CHECKED_IN_WITH_NOSHOWS:
                     $noShowCounter += $guest->getPluses() - $guest->getCheckedInPluses();
-                }
+                    $checkedInGuestCounter += ($guest->getCheckedInPluses() +1);
+                    break;
+                case CheckinStatusEnum::CANCELLED:
+                    $noShowCounter += ($guest->getPluses() +1);
+                    break;
             }
         }
         $percentage = (100 / ($guestCounter) * $checkedInGuestCounter);

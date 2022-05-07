@@ -91,25 +91,24 @@ class EventCrudController extends AbstractCrudController
             if (!$futureEvent) {
                 $guestRow[] = $guest->getCheckedInPluses();
                 $guestRow[] = $guest->getCheckInTime() ? $guest->getCheckInTime()->format('d.m.Y H:i') : '-';
-                // @todo Fix this once #31 is merged by Andy
-                $guestRow[] = 'FIXED WITH #31';
+                $guestRow[] = $guest->getCheckInStatus();
             }
             $csvString .= $this->compileCSVRow($guestRow);
         }
         $response = new Response($csvString);
         $response->headers->set('Content-Encoding', 'UTF-8');
         $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . str_replace(' ', '_', $event->getName()) . '.csv');
+        $currentTimeAndDate = new \DateTime('now');
+        $fileName = 'Guestlist_Export_' . $currentTimeAndDate->format('Y-m-d_H:i') . '__' . str_replace(' ', '_', $event->getName());
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName . '.csv');
         return $response;
     }
 
     private function compileCSVRow(array $data): string
     {
-        $line = '';
-        foreach ($data as $value) {
-            $line .= '"' . $value . '",';
-        }
-        $line .= "\n";
+        $line = '"';
+        $line .= implode('","', $data);
+        $line .= "\"\n";
         return $line;
     }
 }

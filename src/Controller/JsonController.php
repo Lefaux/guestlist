@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Guest;
+use App\Enum\CheckinStatusEnum;
 use App\Service\EventService;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,15 +52,27 @@ class JsonController extends AbstractController
     {
         $payload = [];
         if (($content = $request->getContent()) !== '') {
-            $payload = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+            try {
+                $payload = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                return $this->json([
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'stack' => $e->getTrace(),
+                ], Response::HTTP_BAD_REQUEST);
+            }
         }
-        $checkInTime = new \DateTime('now');
+        $checkInTime = new DateTime('now');
         try {
             $guest->setCheckInTime($checkInTime);
             $guest->setCheckedInPluses($payload['checkedInPluses'] ?: 0);
+            $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN);
+            if ($guest->getPluses() > $guest->getCheckedInPluses()) {
+                $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN_WITH_NOSHOWS);
+            }
             $this->entityManager->persist($guest);
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json([
                 'exception' => get_class($e),
                 'message' => $e->getMessage(),
@@ -75,10 +90,11 @@ class JsonController extends AbstractController
         try {
             $guest->setCheckInTime(null);
             $guest->setCheckedInPluses(null);
+            $guest->setCheckInStatus(CheckinStatusEnum::OPEN);
 
             $this->entityManager->persist($guest);
             $this->entityManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json([
                 'exception' => get_class($e),
                 'message' => $e->getMessage(),
@@ -94,5 +110,30 @@ class JsonController extends AbstractController
     public function getStats(Event $event): Response
     {
         return $this->json($this->eventService->getStatsForEvent($event));
+    }
+
+    /**
+     * @Route("/json/cancel/{guest}", name="app_json_cancel", methods={"POST"})
+     */
+    public function cancelGuest(Guest $guest): JsonResponse
+    {
+        if ($guest->getCheckInStatus() !== CheckinStatusEnum::OPEN) {
+            return $this->json([
+                'message' => 'You can only mark open positions as "no show".',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        try {
+            $guest->setCheckedInPluses(0);
+            $guest->setCheckInStatus(CheckinStatusEnum::CANCELLED);
+            $this->entityManager->persist($guest);
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            return $this->json([
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'stack' => $e->getTrace(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return $this->json($guest);
     }
 }

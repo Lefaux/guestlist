@@ -153,6 +153,33 @@ function handleLoadedGuestList(e) {
                     });
                 });
             });
+
+            checkinModal.querySelector('[data-action="perform-mark-no-show"]').addEventListener('click', async function (event) {
+                event.target.disabled = true;
+                event.target.innerHTML = '';
+                event.target.appendChild(getFromTemplate(SELECTOR_BUTTON_IN_PROGRESS));
+
+                await fetch('/json/cancel/' + guestId, {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                }).then(async function (response) {
+                    response.json().then(function (data) {
+                        modal.hide();
+
+                        if (!response.ok) {
+                            handleAjaxError(data);
+                            return;
+                        }
+
+                        document.querySelector(SELECTOR_GUEST_LIST_TABLE).dispatchEvent(new CustomEvent('guestlist:record-updated', {
+                            detail: {
+                                guestId: guestId,
+                                data: data
+                            }
+                        }));
+                    });
+                });
+            });
         }
 
         if (event.target.matches(SELECTOR_CHECKOUT_BUTTON)) {
@@ -230,7 +257,9 @@ function handleAjaxError(data) {
     });
     modal.show();
 
-    errorModal.querySelector('pre').textContent = data.stack.map(item => item.file + ':' + item.line).join("\n");
+    if (typeof data.stack !== 'undefined') {
+        errorModal.querySelector('pre').textContent = data.stack.map(item => item.file + ':' + item.line).join("\n");
+    }
 }
 
 function injectData(dataValues, domNode) {
@@ -262,6 +291,20 @@ function injectData(dataValues, domNode) {
             }
         });
     }
+
+    // Handle conditions
+    Array.from(domNode.querySelectorAll('[data-if]')).forEach(function (conditionalNode) {
+        const condition = conditionalNode.dataset.if;
+        if (condition.includes('!=')) {
+            const [field, matchingValue] = condition.split('!=').map(operand => operand.trim());
+            const property = field.substring(1);
+            const actualValue = dataValues[property] || null;
+
+            if (actualValue === matchingValue) {
+                conditionalNode.remove();
+            }
+        }
+    });
 }
 
 function disposeModalOnClose(modal) {
@@ -276,7 +319,7 @@ function getFromTemplate(id) {
 }
 
 function composeGuestRow(data) {
-    const template = data.checkInTime === null
+    const template = data.status === 'OPEN'
         ? SELECTOR_GUEST_NOT_CHECKED_IN_TEMPLATE
         : SELECTOR_GUEST_CHECKED_IN_TEMPLATE;
     const rowFromTemplate = getFromTemplate(template);
@@ -286,6 +329,10 @@ function composeGuestRow(data) {
     if (data.vip) {
         rowFromTemplate.classList.replace('text-white', 'text-warning')
         rowFromTemplate.classList.add('bg-vip');
+    }
+
+    if (data.status === 'CANCELLED') {
+        rowFromTemplate.classList.replace('bg-danger', 'guest-cancelled');
     }
 
     if (data.pluses) {
