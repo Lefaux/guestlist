@@ -38,7 +38,7 @@ class DashboardController extends AbstractDashboardController
                 'stats' => $this->eventService->getStatsForEvent($event)
             ];
         }
-        return $this->render('dashboard.html.twig', ['events' => $events]);
+        return $this->render('admin/dashboard.html.twig', ['events' => $events]);
     }
 
     public function configureDashboard(): Dashboard
