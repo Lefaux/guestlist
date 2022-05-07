@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Event;
 use App\Entity\Guest;
 use App\Form\GuestType;
+use DateTime;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -49,7 +50,7 @@ class EventCrudController extends AbstractCrudController
             DateField::new('eventStart')->setColumns(3),
             TextField::new('name')->setColumns(9),
             CollectionField::new('guests')
-                ->allowAdd(true)
+                ->allowAdd()
                 ->allowDelete()
                 ->setEntryType(GuestType::class)
                 ->setEntryIsComplex(true)
@@ -63,7 +64,7 @@ class EventCrudController extends AbstractCrudController
         $futureEvent = true;
         /** @var Event $event */
         $event = $context->getEntity()->getInstance();
-        if ($event->getEventStart() < new \DateTime('now')) {
+        if ($event->getEventStart() < new DateTime('now')) {
             $futureEvent = false;
         }
         $csvString = '';
@@ -98,7 +99,7 @@ class EventCrudController extends AbstractCrudController
         $response = new Response($csvString);
         $response->headers->set('Content-Encoding', 'UTF-8');
         $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
-        $currentTimeAndDate = new \DateTime('now');
+        $currentTimeAndDate = new DateTime('now');
         $fileName = 'Guestlist_Export_' . $currentTimeAndDate->format('Y-m-d_H:i') . '__' . str_replace(' ', '_', $event->getName());
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName . '.csv');
         return $response;
