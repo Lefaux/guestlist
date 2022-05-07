@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Guestlist for <span class="text-info">{{ event.name }}</span></h1>
     <div id="event-statistics">
-        <div class="progress">
+        <div class="progress mb-1">
             <div data-progress="percentage" class="progress-bar bg-success" role="progressbar" style="width: {{ percentages.percentage }}%" aria-valuenow="{{ percentages.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentages.percentage }}%</div>
             <div data-progress="no-show-percentage" class="progress-bar bg-danger" role="progressbar" style="width: {{ percentages.noShowPercentage }}%" aria-valuenow="{{ percentages.noShowPercentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentages.noShowPercentage }}%</div>
         </div>
@@ -40,8 +40,8 @@
     <table class="table my-4" id="guest-list-table" data-event-id="{{ event.id }}">
         <thead>
             <tr class="text-white text-uppercase bg-secondary">
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th id="sorter-firstname">First Name</th>
+                <th id="sorter-lastname">Last Name</th>
                 <th>Pluses</th>
                 <th>Checked In</th>
                 <th></th>
