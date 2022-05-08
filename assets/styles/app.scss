@@ -38,6 +38,7 @@ $input-group-addon-border-color: $gray-900;
 @import "~bootstrap/scss/helpers";
 @import "~bootstrap/scss/utilities/api";
 @import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/badge";
 
 @import "./modules/tablesort";
 
@@ -58,4 +59,8 @@ $input-group-addon-border-color: $gray-900;
 body.env_dev {
   background-image: linear-gradient(45deg,rgba(255,255,0,.07) 25%,transparent 25%,transparent 50%,rgba(255,255,0,.07) 50%,rgba(255,255,0,.07) 75%,transparent 75%,transparent);
   background-size: 10rem 10rem;
+}
+
+.badge {
+  margin-left: 5px;
 }

@@ -331,6 +331,14 @@ function composeGuestRow(data) {
     if (data.vip) {
         rowFromTemplate.classList.replace('text-white', 'text-warning')
         rowFromTemplate.classList.add('bg-vip');
+        // Add VIP Badge
+        let firstField = rowFromTemplate.firstElementChild;
+        let badge = document.createElement('span');
+        badge.innerText = 'VIP';
+        badge.classList.add('badge');
+        badge.classList.add('bg-success');
+        badge.classList.add('ml-3');
+        firstField.appendChild(badge);
     }
 
     if (data.status === 'CANCELLED') {
