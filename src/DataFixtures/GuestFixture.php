@@ -14,21 +14,111 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+        $checkInOptions = CheckinStatusEnum::getAvailableOptions();
+        $counter = 1;
         $faker = Factory::create();
-        for ($i = 0; $i < 20; $i++) {
-            /** @var Event $event */
-            $event = $this->getReference('event_' . $i);
-            for ($c = 0; $c < $faker->numberBetween(3, 40); $c++) {
-                $guest = new Guest();
-                $guest->setFirstName($faker->firstName);
-                $guest->setLastName($faker->lastName);
-                $guest->setPluses($faker->numberBetween(0,4));
-                $guest->setVip($faker->boolean);
-                $guest->setCheckInStatus(CheckinStatusEnum::OPEN);
-                $guest->setEvent($event);
-                $manager->persist($guest);
-                $this->addReference('event_' . $i . 'guest_' . $c, $guest);
+        /** @var Event $event */
+        $event = $this->getReference('event1');
+        foreach ($checkInOptions as $checkInOption) {
+            if ($checkInOption === CheckinStatusEnum::CHECKED_IN) {
+
             }
+            // Full Name plus 1, no VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(1);
+            $guest->setVip(false);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // First Name plus 1, no VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+            $guest->setPluses(1);
+            $guest->setVip(false);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // Last Name plus 1, no VIP, not checked in
+            $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(1);
+            $guest->setVip(false);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // Full Name plus 1, VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(1);
+            $guest->setVip(true);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // First Name plus 1, VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+            $guest->setPluses(1);
+            $guest->setVip(true);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // Last Name plus 1, VIP, not checked in
+            $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(1);
+            $guest->setVip(true);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // Full Name plus 0, VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(0);
+            $guest->setVip(true);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // First Name plus 1, VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+            $guest->setPluses(0);
+            $guest->setVip(true);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // Last Name plus 1, VIP, not checked in
+            $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(0);
+            $guest->setVip(true);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // Full Name plus 0, VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(0);
+            $guest->setVip(false);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // First Name plus 1, VIP, not checked in
+            $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+            $guest->setPluses(0);
+            $guest->setVip(false);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
+            // Last Name plus 1, VIP, not checked in
+            $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+            $guest->setPluses(0);
+            $guest->setVip(false);
+            $guest->setCheckInStatus($checkInOption);
+            $manager->persist($guest);
+            $this->addReference('event1guest_' . $counter, $guest);
+            $counter++;
         }
 
         $manager->flush();

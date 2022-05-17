@@ -13,15 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class JsonControllerTest extends WebTestCase
 {
 
-    protected $client;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        static::bootKernel([]);
-        $this->client = self::$kernel->getContainer('test.client');
-    }
-
     protected function loadFixtures(array $fixtures): AbstractExecutor
     {
         /** @var AbstractDatabaseTool $databaseTollCollection */
@@ -32,13 +23,13 @@ class JsonControllerTest extends WebTestCase
 
     public function testSomething(): void
     {
-//        self::ensureKernelShutdown();
+        $client = static::createClient();
         $fixtures = $this->loadFixtures([
             EventFixtures::class,
             GuestFixture::class
         ])->getReferenceRepository();
 
-        $this->client->xmlHttpRequest('POST', '/json/stats/1');
+        $client->xmlHttpRequest('POST', '/json/stats/1');
 
         self::assertResponseIsSuccessful();
         $expected = '';

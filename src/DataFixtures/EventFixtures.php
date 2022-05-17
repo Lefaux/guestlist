@@ -12,12 +12,24 @@ class EventFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 20; $i++) {
-            $event = new Event();
-            $event->setName($faker->words(4, true));
-            $event->setEventStart($faker->dateTime());
+        $fixture = [];
+        $fixture[] = [
+            'name' => 'Event 1',
+            'eventStart' => new \DateTime('2022-03-04 18:00:00'),
+            'ident' => 'event1'
+        ];
+        $fixture[] = [
+            'name' => 'Event 2',
+            'eventStart' => new \DateTime('2022-12-04 21:00:00'),
+            'ident' => 'event2'
+        ];
+
+        foreach ($fixture as $item) {
+            $event = (new Event())
+            ->setName($item['name'])
+            ->setEventStart($faker->dateTime());
             $manager->persist($event);
-            $this->addReference('event_' . $i, $event);
+            $this->addReference($item['ident'], $event);
         }
     }
 }
