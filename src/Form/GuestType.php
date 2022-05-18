@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Guest;
+use App\Enum\CheckinStatusEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,6 +18,9 @@ class GuestType extends AbstractType
             ->add('lastName')
             ->add('pluses')
             ->add('vip')
+            ->add('checkInStatus', ChoiceType::class, [
+                'choices'  => array_flip(CheckinStatusEnum::getAvailableOptions(true))
+            ])
         ;
     }
 
