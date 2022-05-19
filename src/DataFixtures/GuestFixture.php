@@ -156,6 +156,14 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $manager->persist($guest);
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
+        // Last Name plus 1, VIP, not checked in
+        $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+        $guest->setPluses(3);
+        $guest->setVip(false);
+        $guest->setCheckInStatus(CheckinStatusEnum::CANCELLED);
+        $manager->persist($guest);
+        $this->addReference('event1guest_' . $counter, $guest);
+        $counter++;
         $manager->flush();
     }
 
