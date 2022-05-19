@@ -36,13 +36,13 @@ class JsonControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
         $expectedArray = [
             'percentages' => [
-                'percentage' => 18,
-                'noShowPercentage' => 27
+                'percentage' => 20,
+                'noShowPercentage' => 37
             ],
             'counters' => [
-                'totalExpectedGuests' => 33,
-                'totalCheckedIn' => 6,
-                'totalNoShows' => 9
+                'totalExpectedGuests' => 41,
+                'totalCheckedIn' => 8,
+                'totalNoShows' => 15
             ]
         ];
         $expected = json_encode($expectedArray);

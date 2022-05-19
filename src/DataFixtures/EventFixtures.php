@@ -20,14 +20,14 @@ class EventFixtures extends Fixture
         ];
         $fixture[] = [
             'name' => 'Event 2',
-            'eventStart' => new \DateTime('2022-12-04 21:00:00'),
+            'eventStart' => new \DateTime('2023-12-04 21:00:00'),
             'ident' => 'event2'
         ];
 
         foreach ($fixture as $item) {
             $event = (new Event())
             ->setName($item['name'])
-            ->setEventStart($faker->dateTime());
+            ->setEventStart($item['eventStart']);
             $manager->persist($event);
             $this->addReference($item['ident'], $event);
         }
