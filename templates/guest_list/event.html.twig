@@ -3,7 +3,7 @@
 {% block title %}Guestlist | Event{% endblock %}
 
 {% block body %}
-    <h1>Guestlist for <span class="text-info">{{ event.name }}</span></h1>
+    <h1>Guestlist for <span class="text-info">{{ event.name }}</span> ({{ event.eventStart|date('d.m.Y') }})</h1>
     <div id="event-statistics">
         <div class="progress mb-1">
             <div data-progress="percentage" class="progress-bar bg-success" role="progressbar" style="width: {{ percentages.percentage }}%" aria-valuenow="{{ percentages.percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentages.percentage }}%</div>
