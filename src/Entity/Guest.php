@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use App\Enum\CheckinStatusEnum;
 use App\Repository\GuestRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use RuntimeException;
 
 /**
  * @ORM\Entity(repositoryClass=GuestRepository::class)
  */
-class Guest implements \JsonSerializable
+class Guest implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -21,42 +24,42 @@ class Guest implements \JsonSerializable
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $firstName;
+    private ?string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $lastName;
+    private ?string $lastName;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $pluses;
+    private ?int $pluses;
 
     /**
      * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="guests", cascade={"persist"})
      */
-    private $event;
+    private ?Event $event;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $checkInTime;
+    private ?DateTimeInterface $checkInTime;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $checkedInPluses;
+    private ?int $checkedInPluses;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $vip;
+    private ?bool $vip;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $checkInStatus;
+    private string $checkInStatus = CheckinStatusEnum::OPEN;
 
     public function getId(): ?int
     {
@@ -111,12 +114,12 @@ class Guest implements \JsonSerializable
         return $this;
     }
 
-    public function getCheckInTime(): ?\DateTimeInterface
+    public function getCheckInTime(): ?DateTimeInterface
     {
         return $this->checkInTime;
     }
 
-    public function setCheckInTime(?\DateTimeInterface $checkInTime): self
+    public function setCheckInTime(?DateTimeInterface $checkInTime): self
     {
         $this->checkInTime = $checkInTime;
 
@@ -169,7 +172,7 @@ class Guest implements \JsonSerializable
         if (CheckinStatusEnum::isOption($checkInStatus)) {
             $this->checkInStatus = $checkInStatus;
         } else {
-            throw new \RuntimeException('Enum not allowed');
+            throw new RuntimeException('Enum not " '.$checkInStatus.' " allowed on a guest');
         }
         return $this;
     }
