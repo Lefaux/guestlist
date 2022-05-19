@@ -4,6 +4,8 @@ namespace App\Tests;
 
 use App\DataFixtures\EventFixtures;
 use App\DataFixtures\GuestFixture;
+use App\Entity\Guest;
+use App\Enum\CheckinStatusEnum;
 use Doctrine\Common\DataFixtures\Executor\AbstractExecutor;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
@@ -21,7 +23,7 @@ class JsonControllerTest extends WebTestCase
         return $abstractDatabaseTool->loadFixtures($fixtures);
     }
 
-    public function testSomething(): void
+    public function testBaseStats(): void
     {
         $client = static::createClient();
         $fixtures = $this->loadFixtures([
@@ -32,8 +34,39 @@ class JsonControllerTest extends WebTestCase
         $client->xmlHttpRequest('POST', '/json/stats/1');
 
         self::assertResponseIsSuccessful();
-        $expected = '';
+        $expectedArray = [
+            'percentages' => [
+                'percentage' => 18,
+                'noShowPercentage' => 27
+            ],
+            'counters' => [
+                'totalExpectedGuests' => 33,
+                'totalCheckedIn' => 6,
+                'totalNoShows' => 9
+            ]
+        ];
+        $expected = json_encode($expectedArray);
         $this->assertSame($expected, $client->getResponse()->getContent());
+    }
+
+    public function testCancellation()
+    {
+        $client = static::createClient();
+        $entityManager = static::getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $repo = $entityManager->getRepository(Guest::class);
+        $fixtures = $this->loadFixtures([
+            EventFixtures::class,
+            GuestFixture::class
+        ])->getReferenceRepository();
+        // Get record
+        /** @var Guest $guestToWorkOn */
+        $guestToWorkOn = $fixtures->getReference('event1guest_1');
+        $expected = CheckinStatusEnum::CANCELLED;
+        $client->xmlHttpRequest('POST', '/json/cancel/' . $guestToWorkOn->getId());
+        $actual = $repo->find($guestToWorkOn->getId());
+        $this->assertSame($expected, $actual->getCheckInStatus());
     }
 
 
