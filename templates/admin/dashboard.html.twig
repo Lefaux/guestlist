@@ -1,7 +1,12 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block content_title %}Guestlist Admin Dashboard{% endblock %}
-{% block page_title %}Guestlist Admin Dashboard{% endblock %}
+{% block page_title %}
+    {% if APP_ENVIRONMENT == 'dev' %}
+        [DEV]
+    {% endif %}
+    Guestlist Admin Dashboard
+{% endblock %}
 
 {% block main %}
     <table class="table">

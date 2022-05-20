@@ -15,9 +15,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class EventCrudController extends AbstractCrudController
 {
+    private string $environment;
+
+    public function __construct(KernelInterface $kernel)
+    {
+        $this->environment = $kernel->getEnvironment();
+    }
+    
     public static function getEntityFqcn(): string
     {
         return Event::class;
@@ -25,10 +33,17 @@ class EventCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
+        $titlePrefix = '';
+        if ($this->environment === 'dev') {
+            $titlePrefix = '[DEV] ';
+        }
         return $crud
             ->setDefaultSort(['eventStart' => 'DESC'])
             ->setDateFormat('dd.MM.Y (eeee)')
             ->showEntityActionsInlined()
+            ->setPageTitle('index', $titlePrefix . 'Guestlist Admin %entity_label_plural%')
+            ->setPageTitle('edit', $titlePrefix . 'Guestlist Admin Edit %entity_label_plural%')
+            ->setPageTitle('new', $titlePrefix . 'Guestlist Admin Add %entity_label_plural%')
             ;
     }
 
