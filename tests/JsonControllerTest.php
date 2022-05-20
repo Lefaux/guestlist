@@ -7,12 +7,29 @@ use App\DataFixtures\GuestFixture;
 use App\Entity\Guest;
 use App\Enum\CheckinStatusEnum;
 use Doctrine\Common\DataFixtures\Executor\AbstractExecutor;
+use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class JsonControllerTest extends WebTestCase
 {
+    private KernelBrowser $client;
+    private EntityManagerInterface $entityManager;
+    private AbstractExecutor $fixtures;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->client = self::createClient();
+        $this->entityManager = static::getContainer()->get('doctrine')->getManager();
+        $this->fixtures = $this->loadFixtures([
+            EventFixtures::class,
+            GuestFixture::class
+        ]);
+    }
 
     protected function loadFixtures(array $fixtures): AbstractExecutor
     {
@@ -24,14 +41,8 @@ class JsonControllerTest extends WebTestCase
 
     public function testBaseStats(): void
     {
-        $client = static::createClient();
-        $fixtures = $this->loadFixtures([
-            EventFixtures::class,
-            GuestFixture::class
-        ])->getReferenceRepository();
-        $event = $fixtures->getReference('event1');
-
-        $client->xmlHttpRequest('POST', '/json/stats/' . $event->getId());
+        $event = $this->fixtures->getReferenceRepository()->getReference('event1');
+        $this->client->xmlHttpRequest('POST', '/json/stats/' . $event->getId());
 
         self::assertResponseIsSuccessful();
         $expectedArray = [
@@ -45,26 +56,19 @@ class JsonControllerTest extends WebTestCase
                 'totalNoShows' => 15
             ]
         ];
-        $expected = json_encode($expectedArray);
-        $this->assertSame($expected, $client->getResponse()->getContent());
+        $expected = json_encode($expectedArray, JSON_THROW_ON_ERROR);
+        $this->assertSame($expected, $this->client->getResponse()->getContent());
     }
 
     public function testCancellation()
     {
-        $client = static::createClient();
-        $entityManager = static::getContainer()
-            ->get('doctrine')
-            ->getManager();
-        $repo = $entityManager->getRepository(Guest::class);
-        $fixtures = $this->loadFixtures([
-            EventFixtures::class,
-            GuestFixture::class
-        ])->getReferenceRepository();
+        $repo = $this->entityManager->getRepository(Guest::class);
+
         // Get record
         /** @var Guest $guestToWorkOn */
-        $guestToWorkOn = $fixtures->getReference('event1guest_1');
+        $guestToWorkOn = $this->fixtures->getReferenceRepository()->getReference('event1guest_1');
         $expected = CheckinStatusEnum::CANCELLED;
-        $client->xmlHttpRequest('POST', '/json/cancel/' . $guestToWorkOn->getId());
+        $this->client->xmlHttpRequest('POST', '/json/cancel/' . $guestToWorkOn->getId());
         $actual = $repo->find($guestToWorkOn->getId());
         $this->assertSame($expected, $actual->getCheckInStatus());
     }
