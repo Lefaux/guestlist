@@ -9,7 +9,6 @@ use App\Enum\CheckinStatusEnum;
 use Doctrine\Common\DataFixtures\Executor\AbstractExecutor;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class JsonControllerTest extends WebTestCase
@@ -30,8 +29,9 @@ class JsonControllerTest extends WebTestCase
             EventFixtures::class,
             GuestFixture::class
         ])->getReferenceRepository();
+        $event = $fixtures->getReference('event1');
 
-        $client->xmlHttpRequest('POST', '/json/stats/1');
+        $client->xmlHttpRequest('POST', '/json/stats/' . $event->getId());
 
         self::assertResponseIsSuccessful();
         $expectedArray = [
