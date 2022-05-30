@@ -84,6 +84,7 @@ function handleLoadedGuestList(e) {
     })
 
     const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
+    showHideCheckedInRow();
     guestListTable.addEventListener('click', function (event) {
         if (event.target.matches(SELECTOR_CHECKIN_BUTTON)) {
             const row = event.target.closest('tr');
