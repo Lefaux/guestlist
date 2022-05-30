@@ -14,6 +14,11 @@ const SELECTOR_GUEST_CHECKED_IN_TEMPLATE = '#guest-list-row-checked-in';
 const SELECTOR_SEARCH_INPUT = '#searchbox';
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Handle Clear Search Button
+    const clearSearchButton = document.querySelector('#searchbox-clear');
+    if (clearSearchButton) {
+        clearSearchButton.addEventListener('click', clearSearchInput);
+    }
     const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
     if (searchInput) {
         const guestListTable = document.querySelector(SELECTOR_GUEST_LIST_TABLE);
@@ -387,3 +392,10 @@ function debounce(func, wait) {
         }, wait);
     };
 };
+
+function clearSearchInput() {
+    const searchInput = document.querySelector(SELECTOR_SEARCH_INPUT);
+    searchInput.value = '';
+    searchInput.dispatchEvent(new Event('input', {bubbles:true}));
+    searchInput.focus();
+}

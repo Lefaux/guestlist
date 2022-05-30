@@ -11,9 +11,9 @@
         </div>
         <table class="table table-sm table-dark">
             <tr>
-                <th width="30%" class="text-muted"># Guests: <span class="text-white fw-bold" data-value="totalExpectedGuests">{{ counters.totalExpectedGuests }}</span></th>
-                <th width="33%" class="text-muted"># Checked In: <span class="text-white fw-bold" data-value="totalCheckedIn">{{ counters.totalCheckedIn }}</span></th>
-                <th width="33%" class="text-muted"># No Show: <span class="text-white fw-bold" data-value="totalNoShows">{{ counters.totalNoShows }}</span></th>
+                <th class="text-muted"># Guests: <span class="text-white fw-bold" data-value="totalExpectedGuests">{{ counters.totalExpectedGuests }}</span></th>
+                <th class="text-muted"># Checked In: <span class="text-white fw-bold" data-value="totalCheckedIn">{{ counters.totalCheckedIn }}</span></th>
+                <th class="text-muted"># No Show: <span class="text-white fw-bold" data-value="totalNoShows">{{ counters.totalNoShows }}</span></th>
             </tr>
         </table>
     </div>
@@ -21,18 +21,23 @@
     <div class="d-flex justify-content-center align-items-center gap-3">
         <div class="flex-fill">
             <div class="input-group">
-            <span class="input-group-text">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
-                </svg>
-            </span>
+                <span class="input-group-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                    </svg>
+                </span>
                 <input type="search" class="form-control form-control-lg" id="searchbox" placeholder="Search for guest" disabled="">
-            </div>
-        </div>
-        <div class="flex-shrink-0">
-            <div class="form-check form-switch form-control-lg">
-                <input class="form-check-input" type="checkbox" role="switch" id="showCheckedInGuests" checked="checked" value="1" data-enpassusermodified="yes">
-                <label class="form-check-label" for="showCheckedInGuests">Show C/I</label>
+                <button class="btn btn-danger" type="button" id="searchbox-clear">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" x="0px" y="0px" viewBox="0 0 1000 1000" xml:space="preserve">
+                        <g><path d="M500,990c-130.9,0-253.9-51-346.4-143.5C60.9,753.9,10,630.9,10,500c0-130.9,50.9-253.9,143.5-346.4C246,61,369.1,10,500,10c130.9,0,254,51,346.5,143.6C939,246.1,990,369.1,990,500c0,130.9-51,253.9-143.6,346.5C753.9,939,630.9,990,500,990z M500,99.1c-107.1,0-207.7,41.7-283.5,117.5C140.8,292.3,99.1,392.9,99.1,500c0,107.1,41.7,207.7,117.4,283.5c75.7,75.7,176.4,117.4,283.5,117.4c107.1,0,207.8-41.7,283.5-117.4c75.7-75.7,117.5-176.4,117.5-283.5c0-107.1-41.7-207.7-117.5-283.5C707.7,140.8,607.1,99.1,500,99.1z"/><path d="M611.8,388.2L388.2,611.8L611.8,388.2z"/><path d="M388.2,656.3c-11.4,0-22.8-4.3-31.5-13.1c-17.4-17.4-17.4-45.6,0-63l223.5-223.6c17.4-17.4,45.6-17.4,63,0c17.4,17.4,17.4,45.6,0,63L419.7,643.3C411,652,399.6,656.3,388.2,656.3z"/><path d="M388.2,388.2l223.5,223.5L388.2,388.2z"/><path d="M611.8,656.3c-11.4,0-22.8-4.3-31.5-13.1L356.8,419.7c-17.4-17.4-17.4-45.6,0-63c17.4-17.4,45.6-17.4,63,0l223.5,223.6c17.4,17.4,17.4,45.6,0,63C634.6,652,623.2,656.3,611.8,656.3z"/></g>
+                    </svg>
+                </button>
+                <div class="input-group-text">
+                    <div class="form-check form-switch form-control-lg">
+                        <input class="form-check-input" type="checkbox" role="switch" id="showCheckedInGuests" checked="checked" value="1" data-enpassusermodified="yes">
+                        <label class="form-check-label" for="showCheckedInGuests">Show C/I</label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
