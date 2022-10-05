@@ -11,15 +11,6 @@
             "config/packages/test/dama_doctrine_test_bundle.yaml"
         ]
     },
-    "deployer/deployer": {
-        "version": "v6.8.0"
-    },
-    "deployer/phar-update": {
-        "version": "v2.2.0"
-    },
-    "deployer/recipes": {
-        "version": "6.2.2"
-    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
@@ -146,18 +137,6 @@
     "phar-io/version": {
         "version": "3.2.1"
     },
-    "phpdocumentor/reflection-common": {
-        "version": "2.2.0"
-    },
-    "phpdocumentor/reflection-docblock": {
-        "version": "5.3.0"
-    },
-    "phpdocumentor/type-resolver": {
-        "version": "1.6.1"
-    },
-    "phpspec/prophecy": {
-        "version": "v1.15.0"
-    },
     "phpunit/php-code-coverage": {
         "version": "9.2.15"
     },
@@ -186,9 +165,6 @@
             "phpunit.xml.dist",
             "tests/bootstrap.php"
         ]
-    },
-    "pimple/pimple": {
-        "version": "v3.5.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -419,9 +395,6 @@
     "symfony/polyfill-uuid": {
         "version": "v1.25.0"
     },
-    "symfony/process": {
-        "version": "v5.4.8"
-    },
     "symfony/property-access": {
         "version": "v5.4.8"
     },
@@ -548,8 +521,5 @@
     },
     "twig/twig": {
         "version": "v3.3.10"
-    },
-    "webmozart/assert": {
-        "version": "1.10.0"
     }
 }
