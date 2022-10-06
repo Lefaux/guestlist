@@ -8,14 +8,12 @@ use App\Enum\CheckinStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
 
 class GuestFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
         $counter = 1;
-        $faker = Factory::create();
         /** @var Event $event */
         $event = $this->getReference('event1');
         $checkInOption = CheckinStatusEnum::OPEN;
@@ -28,7 +26,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
 
-        $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setEvent($event);
         $guest->setPluses(1);
         $guest->setVip(false);
         $guest->setCheckInStatus($checkInOption);
@@ -36,7 +34,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
 
-        $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(1);
         $guest->setVip(false);
         $guest->setCheckInStatus($checkInOption);
@@ -44,7 +42,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(1);
         $guest->setVip(true);
         $guest->setCheckInStatus($checkInOption);
@@ -52,7 +50,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
 
-        $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setEvent($event);
         $guest->setPluses(1);
         $guest->setVip(true);
         $guest->setCheckInStatus($checkInOption);
@@ -60,7 +58,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
 
-        $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(1);
         $guest->setVip(true);
         $guest->setCheckInStatus($checkInOption);
@@ -68,7 +66,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // Full Name plus 0, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(0);
         $guest->setVip(true);
         $guest->setCheckInStatus($checkInOption);
@@ -76,7 +74,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // First Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setEvent($event);
         $guest->setPluses(0);
         $guest->setVip(true);
         $guest->setCheckInStatus($checkInOption);
@@ -84,7 +82,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // Last Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(0);
         $guest->setVip(true);
         $guest->setCheckInStatus($checkInOption);
@@ -92,7 +90,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // Full Name plus 0, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(0);
         $guest->setVip(false);
         $guest->setCheckInStatus($checkInOption);
@@ -100,7 +98,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // First Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setEvent($event);
         $guest->setPluses(0);
         $guest->setVip(false);
         $guest->setCheckInStatus($checkInOption);
@@ -108,7 +106,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // Last Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(0);
         $guest->setVip(false);
         $guest->setCheckInStatus($checkInOption);
@@ -119,7 +117,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
          * Add guests who are checked in
          */
         // Full Name plus 0, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(2);
         $guest->setVip(true);
         $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN);
@@ -129,7 +127,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // First Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setFirstName($faker->firstName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setFirstName('$faker->firstName')->setEvent($event);
         $guest->setPluses(3);
         $guest->setVip(false);
         $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN_WITH_NOSHOWS);
@@ -139,7 +137,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // Last Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(3);
         $guest->setVip(false);
         $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN_WITH_NOSHOWS);
@@ -149,7 +147,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // Last Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(3);
         $guest->setVip(false);
         $guest->setCheckInStatus(CheckinStatusEnum::CANCELLED);
@@ -157,13 +155,13 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event1guest_' . $counter, $guest);
         $counter++;
         // Last Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(3);
         $guest->setVip(false);
         $guest->setCheckInStatus(CheckinStatusEnum::CANCELLED);
         $manager->persist($guest);
         $this->addReference('event1guest_' . $counter, $guest);
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(3);
         $guest->setVip(false);
         $guest->setCheckInStatus(CheckinStatusEnum::CHECKED_IN_WITH_NOSHOWS);
@@ -180,7 +178,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         /** @var Event $event */
         $event = $this->getReference('event2');
         // Last Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(3);
         $guest->setVip(false);
         $guest->setCheckInStatus(CheckinStatusEnum::OPEN);
@@ -188,7 +186,7 @@ class GuestFixture extends Fixture implements DependentFixtureInterface
         $this->addReference('event2guest_' . $counter, $guest);
         $counter++;
         // Last Name plus 1, VIP, not checked in
-        $guest = (new Guest())->setFirstName($faker->firstName)->setLastName($faker->lastName)->setEvent($event);
+        $guest = (new Guest())->setFirstName('$faker->firstName')->setLastName('$faker->lastName')->setEvent($event);
         $guest->setPluses(3);
         $guest->setVip(false);
         $guest->setCheckInStatus(CheckinStatusEnum::CANCELLED);
