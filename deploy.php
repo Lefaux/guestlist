@@ -60,7 +60,7 @@ set(
 host(getenv('SSH_HOST'))
     ->set('remote_user', getenv('SSH_USER'))
     ->set('keep_releases', '1')
-    ->set('deploy_path', '{{application_path}}/site')
+    ->set('deploy_path', '{{application_path}}')
     ->set('rsync_src', __DIR__)
     ->set('rsync_dest','{{release_path}}')
     ->set('ssh_arguments', ['-o UserKnownHostsFile=/dev/null']);
