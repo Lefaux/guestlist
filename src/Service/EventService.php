@@ -29,8 +29,12 @@ class EventService
                     break;
             }
         }
-        $percentage = (100 / ($guestCounter) * $checkedInGuestCounter);
-        $noShow = (100 / $guestCounter * $noShowCounter);
+        $percentage = 0;
+        $noShow = 0;
+        if ($guestCounter > 0 && $checkedInGuestCounter > 0) {
+            $percentage = (100 / ($guestCounter) * $checkedInGuestCounter);
+            $noShow = (100 / $guestCounter * $noShowCounter);
+        }
 
         return [
             'percentages' => [
