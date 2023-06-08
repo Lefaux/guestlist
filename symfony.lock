@@ -32,9 +32,6 @@
     "doctrine/common": {
         "version": "3.3.0"
     },
-    "doctrine/data-fixtures": {
-        "version": "1.5.3"
-    },
     "doctrine/dbal": {
         "version": "3.3.5"
     },
@@ -53,18 +50,6 @@
             "config/packages/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
-        ]
-    },
-    "doctrine/doctrine-fixtures-bundle": {
-        "version": "3.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "3.0",
-            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
-        },
-        "files": [
-            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -119,20 +104,8 @@
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
-    "liip/test-fixtures-bundle": {
-        "version": "2.4.0"
-    },
-    "myclabs/deep-copy": {
-        "version": "1.11.0"
-    },
     "nikic/php-parser": {
         "version": "v4.13.2"
-    },
-    "phar-io/manifest": {
-        "version": "2.0.3"
-    },
-    "phar-io/version": {
-        "version": "3.2.1"
     },
     "phpunit/php-code-coverage": {
         "version": "9.2.15"
@@ -140,28 +113,8 @@
     "phpunit/php-file-iterator": {
         "version": "3.0.6"
     },
-    "phpunit/php-invoker": {
-        "version": "3.1.1"
-    },
     "phpunit/php-text-template": {
         "version": "2.0.4"
-    },
-    "phpunit/php-timer": {
-        "version": "5.0.3"
-    },
-    "phpunit/phpunit": {
-        "version": "9.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "9.3",
-            "ref": "a6249a6c4392e9169b87abf93225f7f9f59025e6"
-        },
-        "files": [
-            ".env.test",
-            "phpunit.xml.dist",
-            "tests/bootstrap.php"
-        ]
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -175,50 +128,17 @@
     "psr/log": {
         "version": "1.1.4"
     },
-    "sebastian/cli-parser": {
-        "version": "1.0.1"
-    },
-    "sebastian/code-unit": {
-        "version": "1.0.8"
-    },
     "sebastian/code-unit-reverse-lookup": {
         "version": "2.0.3"
-    },
-    "sebastian/comparator": {
-        "version": "4.0.6"
     },
     "sebastian/complexity": {
         "version": "2.0.2"
     },
-    "sebastian/diff": {
-        "version": "4.0.4"
-    },
     "sebastian/environment": {
         "version": "5.1.4"
     },
-    "sebastian/exporter": {
-        "version": "4.0.4"
-    },
-    "sebastian/global-state": {
-        "version": "5.0.5"
-    },
     "sebastian/lines-of-code": {
         "version": "1.0.3"
-    },
-    "sebastian/object-enumerator": {
-        "version": "4.0.4"
-    },
-    "sebastian/object-reflector": {
-        "version": "2.0.4"
-    },
-    "sebastian/recursion-context": {
-        "version": "4.0.4"
-    },
-    "sebastian/resource-operations": {
-        "version": "3.0.3"
-    },
-    "sebastian/type": {
-        "version": "3.0.0"
     },
     "sebastian/version": {
         "version": "3.0.2"
